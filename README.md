@@ -33,6 +33,8 @@ Warden is an AI agent with **the same access as your user account**. It executes
 
 This is the warning the dashboard shows on first launch. It is not a joke and it is not boilerplate. Do not run Warden on a machine you care about unless you have read the code, understood the risks, and accepted that you are handing a language model the keys to your computer.
 
+Now that *that's* out of the way — I'm currently running it on my laptop and my desktop, just rawdogging the system, and it has been solid. `sudo` prompts pop up graphically (polkit catches them), and in practice it doesn't stray out of its workspace unless it's actively searching for files or the like. Is this stupid in theory? Yes, absolutely. Does it work in practice? So far, yes — for now. Just back things up from time to time, in case.
+
 ---
 
 ## What is it?
