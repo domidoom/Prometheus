@@ -233,6 +233,18 @@ One-touch prompt buttons for the things you do all the time — setup, review, w
 
 ![Quick Actions panel: one-touch prompts for setup, review, write, and research](docs/screenshots/actions.png)
 
+### 📖 Built-In Help
+
+An agent system is only as good as the requests you give it, so Warden teaches you how to use it. On first launch the dashboard opens a **How to Use Warden** guide that leads with the one thing new users need to hear — *this is not a chatbot* — then walks the whole system: the agent roster and what each specialist actually does, how to convene the Council on a decision, how to delegate to Atlas (including parallel delegations in a single turn), the skills system, and what kinds of asks work best.
+
+![How to Use Warden modal: the agent roster and what each specialist does](docs/screenshots/help.png)
+
+![How to Use Warden modal: convening the Council, delegating to Atlas, and the skills system](docs/screenshots/help2.png)
+
+Behind the modal sits a full help site with in-depth pages. The flagship, *not-a-chatbot*, puts chatbot-style asks and agent-style asks side by side — "tell me about microservices" gets you conversation; "read `src/auth.ts` and tell me if there's a timing-safe comparison missing" gets you tools run, files read, verdicts returned — then distills the principles that make requests land: be specific about the target, parallelize independent asks, read `BLOCKED` messages instead of retrying blindly, and watch the verbose bar to see what Warden is doing right now.
+
+![Help page "This is not a chatbot": chatbot-style vs agent-style asks and the five principles](docs/screenshots/help3.png)
+
 ---
 
 ## 🧩 MCP Ecosystem
