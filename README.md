@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔥 Prometheus
+# 🔥 Warden
 
 ### Your own AI. On your own machine. Hybrid by design.
 
@@ -27,17 +27,17 @@
 
 ## This is insane software. It is probably not safe to run.
 
-Prometheus is an AI agent with **the same access as your user account**. It executes shell commands, moves your mouse and types on your keyboard, drives your real browser with your real logged-in sessions and saved passwords, reads and sends your email, and can **edit and restart its own source code**. There is no sandbox and no container. A model mistake, a prompt injection from a web page it visits, or an email it reads can do anything you can do at a terminal.
+Warden is an AI agent with **the same access as your user account**. It executes shell commands, moves your mouse and types on your keyboard, drives your real browser with your real logged-in sessions and saved passwords, reads and sends your email, and can **edit and restart its own source code**. There is no sandbox and no container. A model mistake, a prompt injection from a web page it visits, or an email it reads can do anything you can do at a terminal.
 
 ![Safety warning modal shown on first dashboard launch](docs/screenshots/warning.png)
 
-This is the warning the dashboard shows on first launch. It is not a joke and it is not boilerplate. Do not run Prometheus on a machine you care about unless you have read the code, understood the risks, and accepted that you are handing a language model the keys to your computer.
+This is the warning the dashboard shows on first launch. It is not a joke and it is not boilerplate. Do not run Warden on a machine you care about unless you have read the code, understood the risks, and accepted that you are handing a language model the keys to your computer.
 
 ---
 
 ## What is it?
 
-Prometheus is a personal AI assistant that lives on your desktop. It runs local models through Ollama for fast, private tasks, and reaches out to cloud models for heavy lifting — all within a single conversation. It connects to your real browser, controls your desktop, manages your email and calendar, and talks to you through whatever channel you prefer.
+Warden is a personal AI assistant that lives on your desktop. It runs local models through Ollama for fast, private tasks, and reaches out to cloud models for heavy lifting — all within a single conversation. It connects to your real browser, controls your desktop, manages your email and calendar, and talks to you through whatever channel you prefer.
 
 ---
 
@@ -89,7 +89,7 @@ There is no scheduling agent. A schedule is two things: a **crontab expression**
 
 ## 🧠 Prompt Engineering
 
-> **This is the feature that makes Prometheus work.** The system prompt isn't a paragraph of vibes — it's a carefully engineered control surface that has been iterated on extensively.
+> **This is the feature that makes Warden work.** The system prompt isn't a paragraph of vibes — it's a carefully engineered control surface that has been iterated on extensively.
 
 ### 🎯 Delegation Discipline
 
@@ -101,11 +101,11 @@ This is reinforced at three layers: the orchestrator's system prompt, the Atlas 
 
 ### 🧵 Fabric Pattern Integration
 
-Prometheus ships with hundreds of expert prompt patterns from the Fabric library. Every turn, the user's message is keyword-extracted and the top 5 most relevant patterns are injected into the system prompt by name and description. The orchestrator loads the full pattern on demand and bakes its framing into the Atlas task brief — giving the larger model the structure it needs without the orchestrator micromanaging the execution.
+Warden ships with hundreds of expert prompt patterns from the Fabric library. Every turn, the user's message is keyword-extracted and the top 5 most relevant patterns are injected into the system prompt by name and description. The orchestrator loads the full pattern on demand and bakes its framing into the Atlas task brief — giving the larger model the structure it needs without the orchestrator micromanaging the execution.
 
 ### 🎲 Dynamic Tool Selection
 
-Prometheus is built to host many tools at once — the core set plus anything you add via skills and MCP servers — so the tool surface had to scale without bloating every prompt. Not all 30+ tools go into every turn. Keywords from the conversation are extracted and tools are ranked by relevance; the core routing tools (sub-agents, Read, Bash) are always included, and everything else is surfaced only when relevant. This keeps the context window lean, the model focused, and the system futureproof — add a new tool and it's available without rethinking the prompt.
+Warden is built to host many tools at once — the core set plus anything you add via skills and MCP servers — so the tool surface had to scale without bloating every prompt. Not all 30+ tools go into every turn. Keywords from the conversation are extracted and tools are ranked by relevance; the core routing tools (sub-agents, Read, Bash) are always included, and everything else is surfaced only when relevant. This keeps the context window lean, the model focused, and the system futureproof — add a new tool and it's available without rethinking the prompt.
 
 ![Skills & MCP panel: dozens of toggled capabilities](docs/screenshots/skills.png)
 
@@ -133,13 +133,13 @@ Long conversations are compacted by a Mercury summarization layer. Older turns a
 
 ### ✏️ Self-Editing
 
-The agent can modify its own source. A built-in `self-edit` skill constrains edits to `src/` and `container/agent-runner/src/`, runs `npm run build`, gates on a successful compile, tells you what's changing, then restarts the service with `systemctl --user restart prometheus`. It refuses to touch `dist/`, configs, or the systemd unit, and never restarts on a failed build — so the agent can ship its own fixes without you opening a terminal.
+The agent can modify its own source. A built-in `self-edit` skill constrains edits to `src/` and `container/agent-runner/src/`, runs `npm run build`, gates on a successful compile, tells you what's changing, then restarts the service with `systemctl --user restart warden`. It refuses to touch `dist/`, configs, or the systemd unit, and never restarts on a failed build — so the agent can ship its own fixes without you opening a terminal.
 
 ---
 
 ## ☁️ Hybrid Model Architecture
 
-Prometheus is built for hybrid operation from the ground up. Different tasks need different models, and you shouldn't have to choose one and stick with it.
+Warden is built for hybrid operation from the ground up. Different tasks need different models, and you shouldn't have to choose one and stick with it.
 
 ### ⚙️ How It Works
 
@@ -176,7 +176,7 @@ All conversation history lives in a single SQLite store (`agent_sessions`), shar
 
 ## 🌐 Real Browser Automation
 
-Prometheus connects to your actual Chrome via Playwright and the Chrome DevTools Protocol (port 9222). Your real profile — cookies, sessions, saved passwords, extensions — everything is intact.
+Warden connects to your actual Chrome via Playwright and the Chrome DevTools Protocol (port 9222). Your real profile — cookies, sessions, saved passwords, extensions — everything is intact.
 
 The browser tools operate on **DOM accessibility snapshots** and a complete set of DOM interaction tools. Each element gets a `[ref=e12]` identifier; the agent navigates, clicks, types, fills forms, selects dropdowns, hovers, switches tabs, takes screenshots, runs JavaScript with `browser_evaluate`, and waits for page state — all by ref or by URL. Screenshots exist for visual verification of end states.
 
@@ -186,7 +186,7 @@ Chrome runs as a persistent process with its own watchdog. It survives agent res
 
 ## 🖱️ Desktop Control
 
-Prometheus controls your actual desktop through built-in tools and MCP servers:
+Warden controls your actual desktop through built-in tools and MCP servers:
 
 - **Built-in:** screenshots via `spectacle` and input synthesis via `xdotool` (mouse click, type text, send key combos). This works on X11; Wayland coverage depends on your compositor's xdotool compatibility.
 - **KDE Plasma MCP server:** notifications, clipboard, opening URLs, reading current activity, KWin window verbs — all via D-Bus through the optional Plasma MCP server configured in `data/mcp-servers.json`.
@@ -262,7 +262,7 @@ Message from WhatsApp, continue on Telegram, check the dashboard — same contex
 | Database | SQLite via better-sqlite3 |
 | Browser | Playwright (playwright-core) over CDP, driving your real Chrome — DOM interaction (navigate, click, type, read, evaluate JS, screenshot) |
 | Desktop | xdotool + spectacle; optional KDE Plasma MCP |
-| Terminal | Live PTY shell (tmux `prometheus-shell`) |
+| Terminal | Live PTY shell (tmux `warden-shell`) |
 | LLM | Ollama (local + cloud) |
 | LLM Routing | Credential proxy with format translation for cloud endpoints |
 | Messaging | grammy (Telegram), Baileys (WhatsApp), Slack SDK |
@@ -279,8 +279,8 @@ All LLM communication is raw HTTP fetch to Ollama. No vendor SDKs. You control t
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/domdoss/prometheus.git
-cd prometheus
+git clone https://github.com/domdoss/warden.git
+cd warden
 bash install.sh
 ```
 
@@ -288,9 +288,9 @@ bash install.sh
 
 ```bash
 # Service control (Linux)
-systemctl --user start prometheus
-systemctl --user kill prometheus   # fast stop
-systemctl --user start prometheus  # restart
+systemctl --user start warden
+systemctl --user kill warden   # fast stop
+systemctl --user start warden  # restart
 
 # Dashboard
 open http://localhost:3200
@@ -300,7 +300,7 @@ open http://localhost:3200
 
 ## 🗣️ Voice Assistant
 
-`voice/` is a voice-first desktop companion that turns Prometheus into a talk-to-it assistant. Press a button, double-clap (or snap), or hit the global **F9** hotkey — speak, and the reply is spoken back.
+`voice/` is a voice-first desktop companion that turns Warden into a talk-to-it assistant. Press a button, double-clap (or snap), or hit the global **F9** hotkey — speak, and the reply is spoken back.
 
 - 🎤 Local STT (Whisper) + TTS (Kokoro) — your voice never leaves the machine.
 - 👻 Hologram UI that reflects state (idle / listening / thinking / speaking).
@@ -310,7 +310,7 @@ open http://localhost:3200
 
 ![Hologram voice assistant interface](docs/screenshots/voice.png)
 
-See `voice/README.md` for install and usage. Run `python single.py` once to point it at your local Prometheus server, then `python main.py`.
+See `voice/README.md` for install and usage. Run `python single.py` once to point it at your local Warden server, then `python main.py`.
 
 ---
 
@@ -319,7 +319,7 @@ See `voice/README.md` for install and usage. Run `python single.py` once to poin
 All settings live in `data/env/env`:
 
 ```bash
-ASSISTANT_NAME=Prometheus
+ASSISTANT_NAME=Warden
 TZ=America/Vancouver
 IDLE_TIMEOUT=14400000          # 4h warm-runner window
 OLLAMA_URL=http://127.0.0.1:11434
@@ -331,15 +331,15 @@ TELEGRAM_BOT_TOKEN=            # from @BotFather
 
 ---
 
-## 🤔 Why Prometheus?
+## 🤔 Why Warden?
 
 Most AI assistants live in the cloud. They see what you type, not what you see. They run on someone else's hardware, with someone else's model, under someone else's terms.
 
-Prometheus runs on **your** machine. It uses **your** browser, **your** desktop, **your** files, **your** email. It works with local models through Ollama, so your data never leaves your hardware unless you choose to send it. And when you need more power, it reaches out to cloud models — all within the same conversation, with the same memory.
+Warden runs on **your** machine. It uses **your** browser, **your** desktop, **your** files, **your** email. It works with local models through Ollama, so your data never leaves your hardware unless you choose to send it. And when you need more power, it reaches out to cloud models — all within the same conversation, with the same memory.
 
 It is not a demo. It is a real assistant with browser automation, desktop control, voice, email, calendar, multi-channel messaging, a plugin ecosystem, an agent architecture that can reason about your work and audit its own decisions, and a prompt engineering surface that has been battle-tested across hundreds of hours of real use.
 
-> 🔥 *Prometheus stole fire from the gods. This one runs on your laptop.*
+> 🔥 *Warden stole fire from the gods. This one runs on your laptop.*
 
 ---
 

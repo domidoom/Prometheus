@@ -4,7 +4,7 @@
  * One-way projection: project deliverables render as VTODOs in the shared
  * /cal/ Radicale collection, so they show up in KOrganizer alongside normal
  * todos. The rich project graph (financials, blockers, timesheets) never
- * leaves Prometheus — only the actionable todo surface is projected.
+ * leaves Warden — only the actionable todo surface is projected.
  *
  * Two-way on todo fields only: a VTODO status flip in Radicale (the user
  * checked the box in KOrganizer) mirrors completion back into the internal

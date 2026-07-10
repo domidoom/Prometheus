@@ -4,7 +4,7 @@
  * handling with HMAC-signed state, token encryption/storage, automatic
  * refresh, and revocation.
  *
- * Tokens are AES-256-GCM encrypted at rest using PROMETHEUS_ENCRYPTION_KEY.
+ * Tokens are AES-256-GCM encrypted at rest using WARDEN_ENCRYPTION_KEY.
  * State parameters are HMAC-SHA256 signed to prevent CSRF.
  * Nonces expire after 10 minutes and are single-use.
  */

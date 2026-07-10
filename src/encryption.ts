@@ -1,6 +1,6 @@
 /**
  * AES-256-GCM encryption for user API keys.
- * Master key stored in data/env/env as PROMETHEUS_ENCRYPTION_KEY.
+ * Master key stored in data/env/env as WARDEN_ENCRYPTION_KEY.
  * Auto-generated on first use.
  */
 import crypto from 'crypto';
@@ -15,16 +15,16 @@ let cachedMasterKey: Buffer | null = null;
 export function getOrCreateMasterKey(): Buffer {
   if (cachedMasterKey) return cachedMasterKey;
 
-  const env = readEnvFile(['PROMETHEUS_ENCRYPTION_KEY']);
-  if (env.PROMETHEUS_ENCRYPTION_KEY) {
-    cachedMasterKey = Buffer.from(env.PROMETHEUS_ENCRYPTION_KEY, 'hex');
+  const env = readEnvFile(['WARDEN_ENCRYPTION_KEY']);
+  if (env.WARDEN_ENCRYPTION_KEY) {
+    cachedMasterKey = Buffer.from(env.WARDEN_ENCRYPTION_KEY, 'hex');
     return cachedMasterKey;
   }
 
   // Generate and persist a new master key
   const key = crypto.randomBytes(32);
-  writeEnvVars({ PROMETHEUS_ENCRYPTION_KEY: key.toString('hex') });
-  logger.info('Generated new PROMETHEUS_ENCRYPTION_KEY');
+  writeEnvVars({ WARDEN_ENCRYPTION_KEY: key.toString('hex') });
+  logger.info('Generated new WARDEN_ENCRYPTION_KEY');
   cachedMasterKey = key;
   return key;
 }

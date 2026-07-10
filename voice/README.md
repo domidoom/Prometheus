@@ -1,6 +1,6 @@
-# Prometheus Voice
+# Warden Voice
 
-A desktop voice thin client for your Prometheus server. Wake it, speak, and your agent replies out loud. All reasoning, tools, and memory live on the server — this app is just ears and a mouth with a hologram UI.
+A desktop voice thin client for your Warden server. Wake it, speak, and your agent replies out loud. All reasoning, tools, and memory live on the server — this app is just ears and a mouth with a hologram UI.
 
 ## How it works
 
@@ -20,7 +20,7 @@ Speak after the beep; a second beep marks the end of your turn. Press/clap again
 
 ## Setup
 
-There is no setup wizard, no login, no user account, and no group selection. The app runs in no-auth single-server mode: one local Prometheus server, one implicit group.
+There is no setup wizard, no login, no user account, and no group selection. The app runs in no-auth single-server mode: one local Warden server, one implicit group.
 
 ```bash
 cd voice
@@ -45,7 +45,7 @@ Bundled defaults live in `config/settings.yaml`; per-user overrides are written 
 
 - Python 3.10+
 - Microphone and speakers
-- A running Prometheus server on the local network
+- A running Warden server on the local network
 
 ## Project Structure
 

@@ -16,7 +16,7 @@ for (const [k, v] of Object.entries(envConfig)) {
 }
 
 export const ASSISTANT_NAME =
-  process.env.ASSISTANT_NAME || envConfig.ASSISTANT_NAME || 'Prometheus';
+  process.env.ASSISTANT_NAME || envConfig.ASSISTANT_NAME || 'Warden';
 export const ASSISTANT_HAS_OWN_NUMBER =
   (process.env.ASSISTANT_HAS_OWN_NUMBER ||
     envConfig.ASSISTANT_HAS_OWN_NUMBER) === 'true';

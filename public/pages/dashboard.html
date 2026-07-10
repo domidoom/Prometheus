@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Prometheus</title>
-<meta property="og:title" content="Dashboard — Prometheus">
+<title>Dashboard — Warden</title>
+<meta property="og:title" content="Dashboard — Warden">
 <meta property="og:description" content="Your command center for the whole suite. Chat, projects, files, automations, calendar, vault — and everything your AI crew does — visible, searchable, and manageable from one dashboard.">
 <meta property="og:image" content="https://dockbox.dev/og-image.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dashboard — Prometheus">
+<meta name="twitter:title" content="Dashboard — Warden">
 <meta name="twitter:description" content="Your command center. Everything your organization does with AI — visible, searchable, and manageable from one dashboard.">
 <meta name="twitter:image" content="https://dockbox.dev/og-image.png">
 <meta name="description" content="Your command center for the whole suite. Chat, projects, files, automations, calendar, vault — and everything your AI crew does — visible, searchable, and manageable from one dashboard.">
@@ -19,10 +19,10 @@
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Dashboard — Prometheus",
+  "name": "Dashboard — Warden",
   "description": "Your command center. Everything your organization does with AI — visible, searchable, and manageable from one dashboard.",
   "url": "https://dockbox.dev/pages/dashboard.html",
-  "isPartOf": { "@type": "WebSite", "name": "Prometheus", "url": "https://dockbox.dev" }
+  "isPartOf": { "@type": "WebSite", "name": "Warden", "url": "https://dockbox.dev" }
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2116,7 +2116,7 @@ footer {
 <!-- ══ Navigation ══ -->
 <nav>
   <div class="container">
-    <a href="/" class="logo"><img src="/dockbox-logo.png" alt="" class="logo-icon"><span class="logo-text">Prometheus</span></a>
+    <a href="/" class="logo"><img src="/dockbox-logo.png" alt="" class="logo-icon"><span class="logo-text">Warden</span></a>
     <div class="nav-links">
       <a href="/pages/product.html">Product</a>
       <a href="/pages/security.html">Security</a>
@@ -2271,7 +2271,7 @@ footer {
                   <div class="mock-activity-title">Recent Activity</div>
                   <div class="mock-activity-item">
                     <div class="mock-avatar" style="background: var(--accent);">D</div>
-                    <div class="mock-activity-text"><strong>Prometheus</strong> completed task "Generate Q1 report"</div>
+                    <div class="mock-activity-text"><strong>Warden</strong> completed task "Generate Q1 report"</div>
                     <div class="mock-activity-time">2m ago</div>
                   </div>
                   <div class="mock-activity-item">
@@ -2372,7 +2372,7 @@ footer {
                     Can you review the pull request for the auth refactor? Focus on the token rotation logic.
                   </div>
                   <div class="mock-msg bot">
-                    <div class="msg-name">Prometheus</div>
+                    <div class="msg-name">Warden</div>
                     I've reviewed PR #247. The token rotation looks solid, but I found two issues:<br><br>
                     1. The refresh window overlaps with the expiry check in <code style="font-size: 0.55rem; background: var(--stone-50); padding: 1px 3px; border-radius: 2px;">auth/rotate.ts:84</code><br>
                     2. Missing error handler for concurrent rotation requests<br><br>
@@ -2382,7 +2382,7 @@ footer {
                     Yes, draft the fix and create a task to track it.
                   </div>
                   <div class="mock-msg bot">
-                    <div class="msg-name">Prometheus</div>
+                    <div class="msg-name">Warden</div>
                     Done. I've created the fix in <code style="font-size: 0.55rem; background: var(--stone-50); padding: 1px 3px; border-radius: 2px;">auth/rotate.ts</code> and added a work task "Fix token rotation race condition" assigned to you with high priority.
                   </div>
                 </div>
@@ -2961,7 +2961,7 @@ footer {
     <div class="section-header fade-in">
       <span class="section-label">Admin Dashboard</span>
       <h2>Full system oversight</h2>
-      <p>Everything that happens across your Prometheus instance, from every conversation to every running container.</p>
+      <p>Everything that happens across your Warden instance, from every conversation to every running container.</p>
     </div>
 
     <!-- System Overview -->
@@ -3059,7 +3059,7 @@ footer {
         </div>
         <div class="view-text">
           <h3>System Overview</h3>
-          <p>KPI cards, health indicators, and active container status. Everything you need to know about your Prometheus instance at a glance &mdash; uptime, groups, tasks, and message volume.</p>
+          <p>KPI cards, health indicators, and active container status. Everything you need to know about your Warden instance at a glance &mdash; uptime, groups, tasks, and message volume.</p>
           <ul class="feature-list">
             <li>Real-time uptime and health monitoring</li>
             <li>Active container list with runtime duration</li>
@@ -3330,7 +3330,7 @@ footer {
       <div class="pwa-text">
         <span class="section-label">Mobile Ready</span>
         <h2>Works everywhere you do</h2>
-        <p>Prometheus works as a Progressive Web App. Install it on your phone's home screen and get the full dashboard experience with push notifications &mdash; no app store required.</p>
+        <p>Warden works as a Progressive Web App. Install it on your phone's home screen and get the full dashboard experience with push notifications &mdash; no app store required.</p>
         <div class="pwa-features">
           <div class="pwa-feature">
             <div class="pwa-feature-icon">
@@ -3370,7 +3370,7 @@ footer {
           <div class="phone-notch"></div>
           <div class="phone-app-header">
             <div class="phone-app-logo">D</div>
-            <div class="phone-app-title">Prometheus</div>
+            <div class="phone-app-title">Warden</div>
           </div>
           <div class="phone-content">
             <div class="phone-card">
@@ -3513,7 +3513,7 @@ footer {
                 Set up the new API endpoint, write tests, and deploy to staging.
               </div>
               <div class="ws-msg bot">
-                <div class="name">Prometheus</div>
+                <div class="name">Warden</div>
                 On it. I'll scaffold the endpoint, add integration tests, then deploy. Watch the terminal pane for progress.
               </div>
               <div class="ws-msg user">
@@ -3521,7 +3521,7 @@ footer {
                 Looks good so far. Skip the load test for now.
               </div>
               <div class="ws-msg bot">
-                <div class="name">Prometheus</div>
+                <div class="name">Warden</div>
                 Understood &mdash; skipping load test. Tests passed, deploying to staging now.<span class="typing-cursor"></span>
               </div>
             </div>
@@ -3594,7 +3594,7 @@ footer {
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <span class="logo"><img src="/dockbox-logo.png" alt="" class="logo-icon"><span class="logo-text">Prometheus</span></span>
+        <span class="logo"><img src="/dockbox-logo.png" alt="" class="logo-icon"><span class="logo-text">Warden</span></span>
         <p>The team collaboration suite with an AI crew built in. Secure, on your own server.</p>
       </div>
       <div class="footer-col">
@@ -3613,7 +3613,7 @@ footer {
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 Prometheus Labs.
+      &copy; 2026 Warden Labs.
     </div>
   </div>
 </footer>

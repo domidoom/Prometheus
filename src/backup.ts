@@ -1,7 +1,7 @@
 /**
  * Backup & Restore
  *
- * Full backup  — DB files + data/ + groups/ PROMETHEUS.md / PROMETHEUS.md / memory / config files
+ * Full backup  — DB files + data/ + groups/ WARDEN.md / WARDEN.md / memory / config files
  * Incremental  — Changed workspace files (groups/**) since last incremental
  *
  * All archives are stored at BACKUP_DIR (/workspace/backups/) which is
@@ -201,7 +201,7 @@ export async function createFullBackup(): Promise<BackupMeta> {
     if (fs.existsSync(d)) sources.push(d);
   }
   // Include root config files
-  const rootConfigs = ['package.json', 'tsconfig.json', 'PROMETHEUS.md', 'start.sh', 'install.sh', 'install-deps.sh'];
+  const rootConfigs = ['package.json', 'tsconfig.json', 'WARDEN.md', 'start.sh', 'install.sh', 'install-deps.sh'];
   for (const f of rootConfigs) {
     const fp = path.join(PROJECT_ROOT, f);
     if (fs.existsSync(fp)) sources.push(fp);

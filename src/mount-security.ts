@@ -1,10 +1,10 @@
 /**
- * Mount Security Module for Prometheus
+ * Mount Security Module for Warden
  *
  * Validates additional mounts against an allowlist stored OUTSIDE the project root.
  * This prevents container agents from modifying security configuration.
  *
- * Allowlist location: ~/.config/prometheus/mount-allowlist.json
+ * Allowlist location: ~/.config/warden/mount-allowlist.json
  */
 import fs from 'fs';
 import os from 'os';

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prometheus installer — single-user, host-native (no Docker).
+# Warden installer — single-user, host-native (no Docker).
 # Target: Linux (Arch/KDE Plasma primary). Run from the project root.
 set -e
 
@@ -8,7 +8,7 @@ ENV_FILE="$PROJECT_DIR/data/env/env"
 cd "$PROJECT_DIR"
 
 echo ""
-echo "  Prometheus · Personal AI Assistant"
+echo "  Warden · Personal AI Assistant"
 echo "  -------------------------------"
 echo ""
 echo "  WARNING: this runs an autonomous agent with the same access as your"
@@ -43,8 +43,8 @@ mkdir -p "$PROJECT_DIR/data/env" "$PROJECT_DIR/logs" "$PROJECT_DIR/store" "$PROJ
 
 if [ ! -f "$ENV_FILE" ]; then
     cat > "$ENV_FILE" <<'ENVEOF'
-# Prometheus configuration. Uncomment and fill what you use.
-ASSISTANT_NAME=Prometheus
+# Warden configuration. Uncomment and fill what you use.
+ASSISTANT_NAME=Warden
 TZ=UTC
 
 # LLM access — set ONE of these, or run Ollama locally (default URL below).
@@ -53,7 +53,7 @@ TZ=UTC
 #OLLAMA_URL=http://127.0.0.1:11434
 
 # Agent workspace (files the agent works in)
-#WORKSPACE_ROOT=~/Documents/Prometheus
+#WORKSPACE_ROOT=~/Documents/Warden
 
 # Channels (optional — dashboard works without any)
 #TELEGRAM_BOT_TOKEN=
@@ -82,7 +82,7 @@ if command -v radicale >/dev/null; then
     fi
     cat > ~/.config/systemd/user/radicale.service <<'RADEOF'
 [Unit]
-Description=Radicale CalDAV/CardDAV server (Prometheus PIM hub)
+Description=Radicale CalDAV/CardDAV server (Warden PIM hub)
 After=network.target
 
 [Service]
@@ -98,9 +98,9 @@ RADEOF
 fi
 
 NODE_BIN="$(command -v node)"
-cat > ~/.config/systemd/user/prometheus.service <<EOF
+cat > ~/.config/systemd/user/warden.service <<EOF
 [Unit]
-Description=Prometheus Personal AI Assistant
+Description=Warden Personal AI Assistant
 After=network.target graphical-session.target radicale.service
 Wants=radicale.service
 PartOf=graphical-session.target
@@ -112,19 +112,19 @@ ExecStart=${NODE_BIN} ${PROJECT_DIR}/dist/index.js
 WorkingDirectory=${PROJECT_DIR}
 Restart=always
 RestartSec=5
-StandardOutput=append:${PROJECT_DIR}/logs/prometheus.log
-StandardError=append:${PROJECT_DIR}/logs/prometheus.error.log
+StandardOutput=append:${PROJECT_DIR}/logs/warden.log
+StandardError=append:${PROJECT_DIR}/logs/warden.error.log
 
 [Install]
 WantedBy=default.target
 EOF
 
 systemctl --user daemon-reload
-systemctl --user enable --now prometheus 2>/dev/null || true
+systemctl --user enable --now warden 2>/dev/null || true
 loginctl enable-linger "$USER" 2>/dev/null || true
 
 echo ""
 echo "  Done. Dashboard: http://localhost:3200"
 echo "  Config:  $ENV_FILE  (add your LLM key/token if you skipped it)"
-echo "  Logs:    $PROJECT_DIR/logs/prometheus.log"
+echo "  Logs:    $PROJECT_DIR/logs/warden.log"
 echo ""

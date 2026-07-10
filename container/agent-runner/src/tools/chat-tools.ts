@@ -13,7 +13,7 @@ registry.register({
     },
     handler: async (args, context) => {
         try {
-            const dbPath = process.env.MESSAGES_DB_PATH || path.join(process.env.PROMETHEUS_ROOT || path.join(process.env.HOME || '~', 'dockbox'), 'store', 'messages.db');
+            const dbPath = process.env.MESSAGES_DB_PATH || path.join(process.env.WARDEN_ROOT || path.join(process.env.HOME || '~', 'dockbox'), 'store', 'messages.db');
             const Database = (await import('better-sqlite3')).default;
             const db = new Database(dbPath, { readonly: true });
             const limit = Math.min(args.limit || 50, 200);
@@ -24,7 +24,7 @@ registry.register({
             db.close();
             if (!rows.length) return 'No chat history found.';
             return 'Chat history:\n' + rows.map((r: any) =>
-                `[${r.timestamp}] ${r.sender_name || (r.is_bot_message ? 'Prometheus' : 'User')}: ${r.content}`
+                `[${r.timestamp}] ${r.sender_name || (r.is_bot_message ? 'Warden' : 'User')}: ${r.content}`
             ).join('\n');
         } catch (err: any) {
             return `Error reading chat history: ${err?.message ?? err}`;

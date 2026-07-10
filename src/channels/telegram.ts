@@ -6,7 +6,7 @@
  *    pins it explicitly; otherwise the first human to /start the bot gets
  *    paired and persisted (router_state 'telegram:owner_id'). Everyone else
  *    is politely refused — this bot can drive a whole computer.
- *  - THINKING: from the moment an owner message arrives until Prometheus's next
+ *  - THINKING: from the moment an owner message arrives until Warden's next
  *    reply is delivered, the chat shows the native "typing…" indicator, so
  *    the phone gets the same "it's working" feel as the dashboard. The
  *    orchestrator's task-announcement message arrives mid-turn as its own
@@ -169,7 +169,7 @@ export class TelegramChannel implements Channel {
       const name = ctx.from?.first_name || 'owner';
       if (!this.ownerChatId) {
         this.pair(chatId, name);
-        await ctx.reply(`Paired. This device is now Prometheus's owner — just talk to me like you do on the dashboard.`);
+        await ctx.reply(`Paired. This device is now Warden's owner — just talk to me like you do on the dashboard.`);
         return;
       }
       if (this.isOwner(chatId)) {

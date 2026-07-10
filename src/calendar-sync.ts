@@ -1,5 +1,5 @@
 /**
- * Calendar sync module for Prometheus.
+ * Calendar sync module for Warden.
  * Pulls calendar events from OAuth providers (Google, Microsoft) and pushes
  * local events back. Background poller runs every 15 minutes.
  */

@@ -1,5 +1,5 @@
 /**
- * Container runtime abstraction for Prometheus.
+ * Container runtime abstraction for Warden.
  * All runtime-specific logic lives here so swapping runtimes means changing one file.
  */
 import { execSync } from 'child_process';
@@ -65,7 +65,7 @@ export function ensureContainerRuntimeRunning(): void {
       '║  2. Run: docker info                                           ║',
     );
     console.error(
-      '║  3. Restart Prometheus                                            ║',
+      '║  3. Restart Warden                                            ║',
     );
     console.error(
       '╚════════════════════════════════════════════════════════════════╝\n',
@@ -74,11 +74,11 @@ export function ensureContainerRuntimeRunning(): void {
   }
 }
 
-/** Kill orphaned Prometheus containers from previous runs. */
+/** Kill orphaned Warden containers from previous runs. */
 export function cleanupOrphans(): void {
   try {
     const output = execSync(
-      `${CONTAINER_RUNTIME_BIN} ps --filter name=prometheus- --format '{{.Names}}'`,
+      `${CONTAINER_RUNTIME_BIN} ps --filter name=warden- --format '{{.Names}}'`,
       { stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf-8' },
     );
     const orphans = output.trim().split('\n').filter(Boolean);

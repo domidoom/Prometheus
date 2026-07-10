@@ -1,5 +1,5 @@
 /**
- * Stdio MCP Server for Prometheus
+ * Stdio MCP Server for Warden
  * Standalone process that agent teams subagents can inherit.
  * Reads context from environment variables, writes IPC files for the host.
  */
@@ -16,9 +16,9 @@ const IPC_DIR = '/workspace/ipc';
 const MESSAGES_DIR = path.join(IPC_DIR, 'messages');
 
 // Context from environment variables (set by the agent runner)
-const chatJid = process.env.PROMETHEUS_CHAT_JID!;
-const groupFolder = process.env.PROMETHEUS_GROUP_FOLDER!;
-const isMain = process.env.PROMETHEUS_IS_MAIN === '1';
+const chatJid = process.env.WARDEN_CHAT_JID!;
+const groupFolder = process.env.WARDEN_GROUP_FOLDER!;
+const isMain = process.env.WARDEN_IS_MAIN === '1';
 
 /**
  * Stdout callback protocol: emit a CALLBACK_START/{json}/CALLBACK_END block on stdout
@@ -1405,7 +1405,7 @@ Examples:
       headers: args.headers || undefined,
       body: args.body ? (() => { try { return JSON.parse(args.body!); } catch { return args.body; } })() : undefined,
       description: args.description || '',
-      userId: process.env.PROMETHEUS_USER_ID || '',
+      userId: process.env.WARDEN_USER_ID || '',
       groupFolder,
       timestamp: new Date().toISOString(),
     };

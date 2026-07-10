@@ -1,6 +1,6 @@
 {
-  "name": "Prometheus — AI Assistant",
-  "short_name": "Prometheus",
+  "name": "Warden — AI Assistant",
+  "short_name": "Warden",
   "description": "Your personal AI assistant with shared terminal, browser, and workspace. Chat, build, and deploy from anywhere.",
   "id": "dockbox-dashboard",
   "start_url": "/user/",
@@ -38,14 +38,14 @@
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Prometheus Dashboard"
+      "label": "Warden Dashboard"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Prometheus Mobile"
+      "label": "Warden Mobile"
     }
   ],
   "shortcuts": [
@@ -123,7 +123,7 @@
   },
   "widgets": [
     {
-      "name": "Prometheus Chat",
+      "name": "Warden Chat",
       "description": "Quick access to your AI assistant",
       "tag": "dockbox-chat",
       "ms_ac_template": "widget/chat.json",

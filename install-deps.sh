@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Installing Prometheus system dependencies..."
+echo "Installing Warden system dependencies..."
 
 # Core toolchain
 sudo pacman -S --needed --noconfirm \

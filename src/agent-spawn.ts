@@ -7,7 +7,7 @@ import { logger } from './logger.js';
 
 // IPC input directory — matches the agent runner's IPC_DIR/input path
 const IPC_INPUT_DIR = path.join(
-  process.env.PROMETHEUS_IPC_DIR || path.join(os.tmpdir(), 'prometheus-ipc'),
+  process.env.WARDEN_IPC_DIR || path.join(os.tmpdir(), 'warden-ipc'),
   'input',
 );
 
@@ -26,57 +26,57 @@ export type AgentRunInput = AgentInput & {
 /**
  * Default `exec_request` callback handler. The agent-runner's Bash tool emits
  * an exec_request callback with `{ command, args, cwd, env }`; this handler
- * runs the command in a VISIBLE tmux session named `prometheus-shell` so the user
+ * runs the command in a VISIBLE tmux session named `warden-shell` so the user
  * can watch commands execute in real-time by attaching to that session.
  *
  * The command is sent as-is — no wrapper, no marker echo. The shell's own
  * `PROMPT_COMMAND` writes the exit code of each command to a sentinel file
- * (`/tmp/.prometheus_last_exit`); we poll that file's mtime to detect completion.
+ * (`/tmp/.warden_last_exit`); we poll that file's mtime to detect completion.
  * The pane shows only the real command + real output, exactly like a normal
  * interactive bash session.
  *
- * If the `prometheus-shell` session doesn't exist, it's created automatically
+ * If the `warden-shell` session doesn't exist, it's created automatically
  * with an init script that installs the PROMPT_COMMAND hook.
  */
-const PROMETHEUS_SHELL_SESSION = 'prometheus-shell';
-const PROMETHEUS_SHELL_INIT = '/tmp/prometheus-shell-init.sh';
-const PROMETHEUS_LAST_EXIT = '/tmp/.prometheus_last_exit';
+const WARDEN_SHELL_SESSION = 'warden-shell';
+const WARDEN_SHELL_INIT = '/tmp/warden-shell-init.sh';
+const WARDEN_LAST_EXIT = '/tmp/.warden_last_exit';
 
-function ensurePrometheusShellSession(): boolean {
+function ensureWardenShellSession(): boolean {
   try {
     // Write the init script that installs our PROMPT_COMMAND hook. Idempotent.
     try {
-      writeFileSync(PROMETHEUS_SHELL_INIT,
+      writeFileSync(WARDEN_SHELL_INIT,
         `[ -f /etc/bash.bashrc ] && source /etc/bash.bashrc\n` +
         `[ -f ~/.bashrc ] && source ~/.bashrc\n` +
-        `__prometheus_precmd() { local ec=$?; echo "$ec" > ${PROMETHEUS_LAST_EXIT}; }\n` +
-        `PROMPT_COMMAND="__prometheus_precmd${'$'}{PROMPT_COMMAND:+;${'$'}PROMPT_COMMAND}"\n` +
-        `export PS1='[prometheus] \\w\\$ '\n`,
+        `__warden_precmd() { local ec=$?; echo "$ec" > ${WARDEN_LAST_EXIT}; }\n` +
+        `PROMPT_COMMAND="__warden_precmd${'$'}{PROMPT_COMMAND:+;${'$'}PROMPT_COMMAND}"\n` +
+        `export PS1='[warden] \\w\\$ '\n`,
         { mode: 0o644 });
     } catch { /* best-effort */ }
 
     try {
-      execSync(`tmux has-session -t ${PROMETHEUS_SHELL_SESSION} 2>/dev/null`, { encoding: 'utf-8' });
+      execSync(`tmux has-session -t ${WARDEN_SHELL_SESSION} 2>/dev/null`, { encoding: 'utf-8' });
       // Session exists — but PROMPT_COMMAND may not be active if the session was
-      // created outside of ensurePrometheusShellSession (e.g. manually, or via start.sh).
+      // created outside of ensureWardenShellSession (e.g. manually, or via start.sh).
       // Source the init script into the live session if the sentinel file is absent.
-      if (!existsSync(PROMETHEUS_LAST_EXIT)) {
+      if (!existsSync(WARDEN_LAST_EXIT)) {
         try {
-          spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SHELL_SESSION, `source ${PROMETHEUS_SHELL_INIT}`, 'Enter'], { encoding: 'utf-8', timeout: 3000 });
+          spawnSync('tmux', ['send-keys', '-t', WARDEN_SHELL_SESSION, `source ${WARDEN_SHELL_INIT}`, 'Enter'], { encoding: 'utf-8', timeout: 3000 });
           const start = Date.now();
           while (Date.now() - start < 2000) {
-            if (existsSync(PROMETHEUS_LAST_EXIT)) break;
+            if (existsSync(WARDEN_LAST_EXIT)) break;
             try { execSync('sleep 0.05', { encoding: 'utf-8' }); } catch { break; }
           }
         } catch { /* best-effort */ }
       }
       return true;
     } catch {
-      execSync(`tmux new-session -d -s ${PROMETHEUS_SHELL_SESSION} -x 200 -y 50 bash --rcfile ${PROMETHEUS_SHELL_INIT}`, { encoding: 'utf-8' });
+      execSync(`tmux new-session -d -s ${WARDEN_SHELL_SESSION} -x 200 -y 50 bash --rcfile ${WARDEN_SHELL_INIT}`, { encoding: 'utf-8' });
       // Give bash a moment to source its init and fire the first PROMPT_COMMAND.
       const start = Date.now();
       while (Date.now() - start < 2000) {
-        if (existsSync(PROMETHEUS_LAST_EXIT)) break;
+        if (existsSync(WARDEN_LAST_EXIT)) break;
         try { execSync('sleep 0.05', { encoding: 'utf-8' }); } catch { break; }
       }
       return true;
@@ -93,25 +93,25 @@ export const execRequestHandler: CallbackHandler = async (args: any) => {
   const timeoutMs: number = typeof args?.timeoutMs === 'number' ? args.timeoutMs : 120000;
 
   // Try the visible tmux session first. If tmux isn't available, fall back to direct spawn.
-  const hasTmux = ensurePrometheusShellSession();
+  const hasTmux = ensureWardenShellSession();
   if (hasTmux) {
     try {
       // Snapshot the sentinel file's mtime *before* sending — we detect completion
       // by watching this file's mtime change (PROMPT_COMMAND writes to it after
       // each command returns).
       let beforeMtime = 0;
-      try { beforeMtime = statSync(PROMETHEUS_LAST_EXIT).mtimeMs; } catch { /* not yet created */ }
+      try { beforeMtime = statSync(WARDEN_LAST_EXIT).mtimeMs; } catch { /* not yet created */ }
 
       // Snapshot pane line count before sending so we know where new output starts.
-      const capBefore = spawnSync('tmux', ['capture-pane', '-t', PROMETHEUS_SHELL_SESSION, '-p', '-S', '-5000'], { encoding: 'utf-8', timeout: 5000 });
+      const capBefore = spawnSync('tmux', ['capture-pane', '-t', WARDEN_SHELL_SESSION, '-p', '-S', '-5000'], { encoding: 'utf-8', timeout: 5000 });
       const beforeLines = (capBefore.stdout || '').split('\n').length;
 
       // Send the command as-is — no cd prefix, no markers. The shell's cwd is
       // managed by the agent's own cd calls; prepending one here just pollutes
       // the pane and the captured output.
       const rawCmd = command;
-      spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SHELL_SESSION, '-l', rawCmd], { encoding: 'utf-8', timeout: 5000 });
-      spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SHELL_SESSION, 'Enter'], { encoding: 'utf-8', timeout: 5000 });
+      spawnSync('tmux', ['send-keys', '-t', WARDEN_SHELL_SESSION, '-l', rawCmd], { encoding: 'utf-8', timeout: 5000 });
+      spawnSync('tmux', ['send-keys', '-t', WARDEN_SHELL_SESSION, 'Enter'], { encoding: 'utf-8', timeout: 5000 });
 
       // Poll the sentinel file's mtime — PROMPT_COMMAND writes to it after each
       // command completes. No marker text ever appears in the pane.
@@ -120,23 +120,23 @@ export const execRequestHandler: CallbackHandler = async (args: any) => {
       while (Date.now() < deadline) {
         await new Promise(r => setTimeout(r, 80));
         try {
-          const mtime = statSync(PROMETHEUS_LAST_EXIT).mtimeMs;
+          const mtime = statSync(WARDEN_LAST_EXIT).mtimeMs;
           if (mtime > beforeMtime) { done = true; break; }
         } catch { /* file gone briefly — keep waiting */ }
       }
 
       if (!done) {
         // Abort the still-running command so the shared shell isn't left wedged.
-        try { spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SHELL_SESSION, 'C-c'], { encoding: 'utf-8', timeout: 3000 }); } catch {}
+        try { spawnSync('tmux', ['send-keys', '-t', WARDEN_SHELL_SESSION, 'C-c'], { encoding: 'utf-8', timeout: 3000 }); } catch {}
         return { ok: false, error: `Command timed out after ${timeoutMs}ms` };
       }
 
       // Read the exit code written by PROMPT_COMMAND.
       let exitCode = 0;
-      try { exitCode = parseInt(readFileSync(PROMETHEUS_LAST_EXIT, 'utf-8').trim(), 10) || 0; } catch { /* missing */ }
+      try { exitCode = parseInt(readFileSync(WARDEN_LAST_EXIT, 'utf-8').trim(), 10) || 0; } catch { /* missing */ }
 
       // Capture the pane after the command completes.
-      const cap = spawnSync('tmux', ['capture-pane', '-t', PROMETHEUS_SHELL_SESSION, '-p', '-S', '-5000'], { encoding: 'utf-8', timeout: 5000 });
+      const cap = spawnSync('tmux', ['capture-pane', '-t', WARDEN_SHELL_SESSION, '-p', '-S', '-5000'], { encoding: 'utf-8', timeout: 5000 });
       const lines = (cap.stdout || '').split('\n');
       // The new lines added since we sent the command start at beforeLines.
       // Layout: [0..beforeLines-1] = old content, [beforeLines] = command echo, [beforeLines+1..] = output, [last] = new prompt.
@@ -208,8 +208,8 @@ const agentState = {
 };
 
 // Live verbose-status label emitted by the agent-runner child via
-// ---PROMETHEUS_STATUS---{...json} markers on stdout. The dashboard polls
-// /api/status and renders this so the user can see what Prometheus is doing
+// ---WARDEN_STATUS---{...json} markers on stdout. The dashboard polls
+// /api/status and renders this so the user can see what Warden is doing
 // right now (e.g. "The Council: round 2 of 4 — Skeptic, Pragmatist
 // deliberating..."). Cleared on turn end.
 export const liveStatus = {
@@ -309,13 +309,13 @@ function onPersistentStdoutData(chunk: Buffer) {
     }
     if (line === 'CALLBACK_START') { agentState.insideCallback = true; agentState.callbackLines = []; continue; }
     // Live verbose-status updates from the agent-runner child. The child
-    // writes `---PROMETHEUS_STATUS---{json}` to stdout whenever it wants to
+    // writes `---WARDEN_STATUS---{json}` to stdout whenever it wants to
     // surface what it's doing right now (e.g. council round progress,
     // sub-agent delegation, tool execution). We stash the latest one and
     // expose it via /api/status → dashboard "verbose bar".
-    if (line.startsWith('---PROMETHEUS_STATUS---')) {
+    if (line.startsWith('---WARDEN_STATUS---')) {
       try {
-        const json = line.slice('---PROMETHEUS_STATUS---'.length).trim();
+        const json = line.slice('---WARDEN_STATUS---'.length).trim();
         const entry = JSON.parse(json);
         liveStatus.phase = entry.phase || '';
         liveStatus.label = entry.label || '';
@@ -324,8 +324,8 @@ function onPersistentStdoutData(chunk: Buffer) {
       } catch { /* ignore malformed status lines */ }
       continue;
     }
-    if (line === 'OUTPUT_START' || line === '---PROMETHEUS_OUTPUT_START---') { agentState.insideOutput = true; continue; }
-    if (line === 'OUTPUT_END' || line === '---PROMETHEUS_OUTPUT_END---') {
+    if (line === 'OUTPUT_START' || line === '---WARDEN_OUTPUT_START---') { agentState.insideOutput = true; continue; }
+    if (line === 'OUTPUT_END' || line === '---WARDEN_OUTPUT_END---') {
       agentState.insideOutput = false;
       // Turn ended — clear the live verbose-status so the dashboard doesn't
       // keep showing "The Council round 2..." after the turn is over.

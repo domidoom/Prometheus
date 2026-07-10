@@ -7,8 +7,8 @@ import path from 'path';
 // collide. The parent doesn't read these files anymore (stdio is the channel),
 // but some legacy sub-agent paths still writeIpcFile + waitForResult. Pointing
 // the dir at a real writable path keeps them from throwing EACCES.
-export const IPC_DIR: string = process.env.PROMETHEUS_IPC_DIR
-  || path.join(os.tmpdir(), 'prometheus-ipc');
+export const IPC_DIR: string = process.env.WARDEN_IPC_DIR
+  || path.join(os.tmpdir(), 'warden-ipc');
 export const TASKS_DIR = path.join(IPC_DIR, 'tasks');
 export const RESULTS_DIR = path.join(IPC_DIR, 'results');
 

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import { registry } from '../tool-registry.js';
 
-const PROMETHEUS_SESSION = 'prometheus-shell';
-const EXIT_FILE = '/tmp/.prometheus_last_exit';
+const WARDEN_SESSION = 'warden-shell';
+const EXIT_FILE = '/tmp/.warden_last_exit';
 
 registry.register({
     name: 'Bash',
@@ -25,7 +25,7 @@ registry.register({
         const label = `Running: ${cmd.slice(0, 80)}`;
 
         let useTmux = false;
-        try { execSync(`tmux has-session -t ${PROMETHEUS_SESSION} 2>/dev/null`, { encoding: 'utf-8' }); useTmux = true; } catch {}
+        try { execSync(`tmux has-session -t ${WARDEN_SESSION} 2>/dev/null`, { encoding: 'utf-8' }); useTmux = true; } catch {}
 
         if (!useTmux) {
             try {
@@ -40,18 +40,18 @@ registry.register({
         // our init path, or reused from a previous process), source the init script
         // into the live session before sending any command. Without this every Bash
         // call polls indefinitely and times out because EXIT_FILE is never written.
-        const INIT_SCRIPT = '/tmp/prometheus-shell-init.sh';
+        const INIT_SCRIPT = '/tmp/warden-shell-init.sh';
         if (!fs.existsSync(EXIT_FILE)) {
             try {
                 fs.writeFileSync(INIT_SCRIPT,
                     `[ -f /etc/bash.bashrc ] && source /etc/bash.bashrc\n` +
                     `[ -f ~/.bashrc ] && source ~/.bashrc\n` +
-                    `__prometheus_precmd() { local ec=$?; echo "$ec" > ${EXIT_FILE}; }\n` +
-                    `PROMPT_COMMAND="__prometheus_precmd\${PROMPT_COMMAND:+;\${PROMPT_COMMAND}}"\n` +
-                    `export PS1='[prometheus] \\w\\$ '\n`,
+                    `__warden_precmd() { local ec=$?; echo "$ec" > ${EXIT_FILE}; }\n` +
+                    `PROMPT_COMMAND="__warden_precmd\${PROMPT_COMMAND:+;\${PROMPT_COMMAND}}"\n` +
+                    `export PS1='[warden] \\w\\$ '\n`,
                     { mode: 0o644 });
             } catch { /* best-effort */ }
-            spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SESSION, `source ${INIT_SCRIPT}`, 'Enter'], { encoding: 'utf-8', timeout: 3000 });
+            spawnSync('tmux', ['send-keys', '-t', WARDEN_SESSION, `source ${INIT_SCRIPT}`, 'Enter'], { encoding: 'utf-8', timeout: 3000 });
             const initDeadline = Date.now() + 2000;
             while (Date.now() < initDeadline) {
                 if (fs.existsSync(EXIT_FILE)) break;
@@ -62,13 +62,13 @@ registry.register({
         // Snapshot sentinel mtime and pane line count before sending.
         let beforeMtime = 0;
         try { beforeMtime = fs.statSync(EXIT_FILE).mtimeMs; } catch {}
-        const capBefore = spawnSync('tmux', ['capture-pane', '-t', PROMETHEUS_SESSION, '-p', '-S', '-1000'], { encoding: 'utf-8', timeout: 5000 });
+        const capBefore = spawnSync('tmux', ['capture-pane', '-t', WARDEN_SESSION, '-p', '-S', '-1000'], { encoding: 'utf-8', timeout: 5000 });
         const beforeLines = (capBefore.stdout || '').split('\n').length;
 
         try {
-            const r1 = spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SESSION, '-l', cmd], { encoding: 'utf-8', timeout: 5000 });
+            const r1 = spawnSync('tmux', ['send-keys', '-t', WARDEN_SESSION, '-l', cmd], { encoding: 'utf-8', timeout: 5000 });
             if (r1.status !== 0) throw new Error(`tmux send-keys failed: ${r1.stderr || r1.stdout}`);
-            const r2 = spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SESSION, 'Enter'], { encoding: 'utf-8', timeout: 5000 });
+            const r2 = spawnSync('tmux', ['send-keys', '-t', WARDEN_SESSION, 'Enter'], { encoding: 'utf-8', timeout: 5000 });
             if (r2.status !== 0) throw new Error(`tmux Enter failed: ${r2.stderr || r2.stdout}`);
         } catch (err: any) {
             return `Error sending command to terminal: ${err.message}`;
@@ -86,7 +86,7 @@ registry.register({
         let exitCode = -1;
         try { exitCode = parseInt(fs.readFileSync(EXIT_FILE, 'utf-8').trim(), 10); } catch {}
 
-        const capAfter = spawnSync('tmux', ['capture-pane', '-t', PROMETHEUS_SESSION, '-p', '-S', '-2000'], { encoding: 'utf-8', timeout: 5000 });
+        const capAfter = spawnSync('tmux', ['capture-pane', '-t', WARDEN_SESSION, '-p', '-S', '-2000'], { encoding: 'utf-8', timeout: 5000 });
         let output = '';
         if (capAfter.stdout) {
             const lines = capAfter.stdout.split('\n');
@@ -97,7 +97,7 @@ registry.register({
         }
 
         if (Number.isNaN(exitCode) || exitCode === -1) {
-            try { spawnSync('tmux', ['send-keys', '-t', PROMETHEUS_SESSION, 'C-c'], { encoding: 'utf-8', timeout: 3000 }); } catch {}
+            try { spawnSync('tmux', ['send-keys', '-t', WARDEN_SESSION, 'C-c'], { encoding: 'utf-8', timeout: 3000 }); } catch {}
             return `Error: Command timed out after ${timeout}ms.\n${output}`;
         }
         if (exitCode !== 0) {

@@ -21,7 +21,7 @@ voice:
   # reject more non-clap sounds, lower it if real claps get missed.
   clap_crest: 4.0
 dockbox:
-  # Your Prometheus/Dockbox server. Use http://localhost:3200 for a local
+  # Your Warden/Dockbox server. Use http://localhost:3200 for a local
   # install, or https://dockbox.dev for the cloud endpoint (cloud needs a
   # cf_access_token, below). The setup wizard writes this for you.
   base_url: http://localhost:3200

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Coding Agent Deletes Entire Production Database in 9 Seconds — Prometheus Blog</title>
+<title>AI Coding Agent Deletes Entire Production Database in 9 Seconds — Warden Blog</title>
 <meta name="description" content="PocketOS CEO Jeremy Crane revealed how the AI coding agent Cursor deleted his company's entire production database in about 9 seconds. Lessons for AI infrastructure.">
 <meta property="og:title" content="AI Coding Agent Deletes Entire Production Database in 9 Seconds">
 <meta property="og:description" content="PocketOS CEO Jeremy Crane revealed how the AI coding agent Cursor deleted his company's entire production database in about 9 seconds.">
@@ -27,8 +27,8 @@
   "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80",
   "datePublished": "2026-05-06T08:00:00Z",
   "dateModified": "2026-05-06T08:00:00Z",
-  "author": { "@type": "Organization", "name": "Prometheus Labs", "url": "https://dockbox.dev" },
-  "publisher": { "@type": "Organization", "name": "Prometheus Labs", "url": "https://dockbox.dev", "logo": { "@type": "ImageObject", "url": "https://dockbox.dev/dockbox-logo.png" } },
+  "author": { "@type": "Organization", "name": "Warden Labs", "url": "https://dockbox.dev" },
+  "publisher": { "@type": "Organization", "name": "Warden Labs", "url": "https://dockbox.dev", "logo": { "@type": "ImageObject", "url": "https://dockbox.dev/dockbox-logo.png" } },
   "mainEntityOfPage": { "@type": "WebPage", "@id": "https://dockbox.dev/pages/blog/cursor-deletes-production-database.html" },
   "articleSection": "Infrastructure",
   "wordCount": 1000
@@ -131,7 +131,7 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
 
 <nav>
   <div class="container">
-    <a href="/" class="logo"><img src="/dockbox-logo-sm.png" alt="Prometheus" width="42" height="42" class="logo-icon"><span class="logo-text">Prometheus</span></a>
+    <a href="/" class="logo"><img src="/dockbox-logo-sm.png" alt="Warden" width="42" height="42" class="logo-icon"><span class="logo-text">Warden</span></a>
     <div class="nav-links">
       <a href="/pages/product.html">Product</a>
       <a href="/pages/solutions.html">Solutions</a>
@@ -222,11 +222,11 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
   <li><strong>Consider read-only production access.</strong> If agents need to query production data for debugging, provide read-only replicas rather than read-write credentials.</li>
 </ul>
 
-<h2>How Prometheus Addresses This Threat</h2>
+<h2>How Warden Addresses This Threat</h2>
 
-<p>Prometheus's containerized architecture eliminates this class of risk entirely. Every AI agent runs in an isolated container with no access to production databases, no access to infrastructure credentials, and no ability to execute arbitrary system commands. The container defines a strict boundary: the agent can interact with the data and services explicitly provided to it, and nothing else.</p>
+<p>Warden's containerized architecture eliminates this class of risk entirely. Every AI agent runs in an isolated container with no access to production databases, no access to infrastructure credentials, and no ability to execute arbitrary system commands. The container defines a strict boundary: the agent can interact with the data and services explicitly provided to it, and nothing else.</p>
 
-<p>This is the difference between treating AI agents as trusted colleagues (the current industry default) and treating them as powerful but constrained tools that require explicit permission for every sensitive action. Prometheus takes the latter approach because, as the PocketOS incident demonstrates, the former approach is a ticking clock.</p>
+<p>This is the difference between treating AI agents as trusted colleagues (the current industry default) and treating them as powerful but constrained tools that require explicit permission for every sensitive action. Warden takes the latter approach because, as the PocketOS incident demonstrates, the former approach is a ticking clock.</p>
 
 <div class="article-share">
   <span>Share this article:</span>
@@ -265,7 +265,7 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <span class="logo"><img src="/dockbox-logo-sm.png" alt="Prometheus" width="42" height="42" class="logo-icon"><span class="logo-text">Prometheus</span></span>
+        <span class="logo"><img src="/dockbox-logo-sm.png" alt="Warden" width="42" height="42" class="logo-icon"><span class="logo-text">Warden</span></span>
         <p>Secure AI infrastructure for your organization.</p>
       </div>
       <div class="footer-col">
@@ -282,7 +282,7 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
         <a href="/signup">Contact</a>
       </div>
     </div>
-    <div class="footer-bottom">&copy; 2026 Prometheus Labs.</div>
+    <div class="footer-bottom">&copy; 2026 Warden Labs.</div>
   </div>
 </footer>
 

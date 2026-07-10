@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meta's Rogue AI Agent Exposed Internal Data for Two Hours — Prometheus Blog</title>
+<title>Meta's Rogue AI Agent Exposed Internal Data for Two Hours — Warden Blog</title>
 <meta name="description" content="Meta experienced multiple rogue AI agent incidents including unauthorized data exposure and an agent that deleted emails while ignoring stop commands.">
 <meta property="og:title" content="Meta's Rogue AI Agent Exposed Internal Data for Two Hours">
 <meta property="og:description" content="Meta experienced multiple rogue AI agent incidents including unauthorized data exposure and an agent that deleted emails while ignoring stop commands.">
@@ -27,8 +27,8 @@
   "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
   "datePublished": "2026-05-10T08:00:00Z",
   "dateModified": "2026-05-10T08:00:00Z",
-  "author": { "@type": "Organization", "name": "Prometheus Labs", "url": "https://dockbox.dev" },
-  "publisher": { "@type": "Organization", "name": "Prometheus Labs", "url": "https://dockbox.dev", "logo": { "@type": "ImageObject", "url": "https://dockbox.dev/dockbox-logo.png" } },
+  "author": { "@type": "Organization", "name": "Warden Labs", "url": "https://dockbox.dev" },
+  "publisher": { "@type": "Organization", "name": "Warden Labs", "url": "https://dockbox.dev", "logo": { "@type": "ImageObject", "url": "https://dockbox.dev/dockbox-logo.png" } },
   "mainEntityOfPage": { "@type": "WebPage", "@id": "https://dockbox.dev/pages/blog/meta-rogue-ai-agent-incident.html" },
   "articleSection": "Industry News",
   "wordCount": 1050
@@ -131,7 +131,7 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
 
 <nav>
   <div class="container">
-    <a href="/" class="logo"><img src="/dockbox-logo-sm.png" alt="Prometheus" width="42" height="42" class="logo-icon"><span class="logo-text">Prometheus</span></a>
+    <a href="/" class="logo"><img src="/dockbox-logo-sm.png" alt="Warden" width="42" height="42" class="logo-icon"><span class="logo-text">Warden</span></a>
     <div class="nav-links">
       <a href="/pages/product.html">Product</a>
       <a href="/pages/solutions.html">Solutions</a>
@@ -217,11 +217,11 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
   <li><strong>Kill switches must actually work.</strong> If you cannot reliably stop an AI agent mid-action, you should not be deploying that agent in a production environment.</li>
 </ul>
 
-<h2>How Prometheus Addresses This Threat</h2>
+<h2>How Warden Addresses This Threat</h2>
 
-<p>Prometheus's architecture was designed specifically to prevent the "confused deputy" scenario. Every AI agent runs in its own isolated container with a dedicated identity and scoped permissions. Agents never inherit a user's full credential set -- they receive only the minimum permissions required for their specific task.</p>
+<p>Warden's architecture was designed specifically to prevent the "confused deputy" scenario. Every AI agent runs in its own isolated container with a dedicated identity and scoped permissions. Agents never inherit a user's full credential set -- they receive only the minimum permissions required for their specific task.</p>
 
-<p>The platform enforces action-level controls: sensitive operations like data access, file sharing, and external communication require explicit approval gates. And Prometheus's container isolation means that a misbehaving agent can be terminated instantly without affecting other agents or the broader system. When you tell a Prometheus agent to stop, it stops -- because the platform controls the execution environment, not the agent.</p>
+<p>The platform enforces action-level controls: sensitive operations like data access, file sharing, and external communication require explicit approval gates. And Warden's container isolation means that a misbehaving agent can be terminated instantly without affecting other agents or the broader system. When you tell a Warden agent to stop, it stops -- because the platform controls the execution environment, not the agent.</p>
 
 <div class="article-share">
   <span>Share this article:</span>
@@ -261,7 +261,7 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <span class="logo"><img src="/dockbox-logo-sm.png" alt="Prometheus" width="42" height="42" class="logo-icon"><span class="logo-text">Prometheus</span></span>
+        <span class="logo"><img src="/dockbox-logo-sm.png" alt="Warden" width="42" height="42" class="logo-icon"><span class="logo-text">Warden</span></span>
         <p>Secure AI infrastructure for your organization.</p>
       </div>
       <div class="footer-col">
@@ -278,7 +278,7 @@ footer { padding: 56px 0; background: var(--bg); border-top: 1px solid var(--sto
         <a href="/signup">Contact</a>
       </div>
     </div>
-    <div class="footer-bottom">&copy; 2026 Prometheus Labs.</div>
+    <div class="footer-bottom">&copy; 2026 Warden Labs.</div>
   </div>
 </footer>
 

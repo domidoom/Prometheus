@@ -16,7 +16,7 @@ registry.register({
             const query = encodeURIComponent(args.query);
             const max = args.max_results || 5;
             const response = await fetch(`https://html.duckduckgo.com/html/?q=${query}`, {
-                headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Prometheus/1.0)' },
+                headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Warden/1.0)' },
             });
             const html = await response.text();
             const results: string[] = [];
@@ -51,7 +51,7 @@ registry.register({
     handler: async (args, _context) => {
         try {
             const response = await fetch(args.url, {
-                headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Prometheus/1.0)' },
+                headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Warden/1.0)' },
                 redirect: 'follow',
             });
             if (!response.ok) return `Error: HTTP ${response.status} ${response.statusText}`;

@@ -40,7 +40,7 @@ registry.register({
 
 registry.register({
     name: 'atlas_background',
-    description: 'Kick off a background Prometheus turn that delegates the given task to Atlas and reports the result back to the user as a new chat message when Atlas finishes. Use this for long-running Atlas work (web scraping, multi-step browser automation, large file generation) where you do NOT need the result to continue the current conversation — you return a confirmation immediately, and the user gets a separate message when the background work completes. Do NOT use this for quick tasks that you need the result of in the same turn; use the synchronous `atlas` delegate for those.',
+    description: 'Kick off a background Warden turn that delegates the given task to Atlas and reports the result back to the user as a new chat message when Atlas finishes. Use this for long-running Atlas work (web scraping, multi-step browser automation, large file generation) where you do NOT need the result to continue the current conversation — you return a confirmation immediately, and the user gets a separate message when the background work completes. Do NOT use this for quick tasks that you need the result of in the same turn; use the synchronous `atlas` delegate for those.',
     schema: {
         type: 'object',
         properties: {
@@ -54,7 +54,7 @@ registry.register({
         // Schedule a 'once' task ~2s in the future. The host's schedule_task
         // callback creates a ScheduledTask; computeNextRun converts the local
         // timestamp to UTC and stores it as next_run; the scheduler polls
-        // getDueTasks and runs it as a fresh Prometheus turn, which delegates to
+        // getDueTasks and runs it as a fresh Warden turn, which delegates to
         // atlas and sendMessage's the result back to the user.
         const fire = new Date(Date.now() + 2000);
         const pad = (n: number) => String(n).padStart(2, '0');

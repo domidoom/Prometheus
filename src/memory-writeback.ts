@@ -19,7 +19,7 @@ import { getChatHistory } from './db.js';
 import { logger } from './logger.js';
 import { resolveGroupFolderPath } from './group-folder.js';
 
-const MEMORY_MODEL = process.env.PROMETHEUS_MEMORY_MODEL || 'gemma4:latest';
+const MEMORY_MODEL = process.env.WARDEN_MEMORY_MODEL || 'gemma4:latest';
 const COOLDOWN_MS = 15 * 60 * 1000; // max one writeback per group per 15 min
 const MIN_NEW_MESSAGES = 4; // skip trivial exchanges
 const TRANSCRIPT_LIMIT = 30; // messages fed to the distiller

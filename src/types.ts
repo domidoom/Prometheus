@@ -33,12 +33,12 @@ export interface ContainerConfig {
 }
 
 // The single chat key for the owner. All messages, tasks, and chats use this JID
-// in the single-user Prometheus architecture.
+// in the single-user Warden architecture.
 export const OWNER_JID = 'owner@local';
 
 export interface AgentInput {
   prompt: string;
-  orchestratorModel?: string; // Prometheus (orchestrator) model
+  orchestratorModel?: string; // Warden (orchestrator) model
   model?: string;             // Atlas/Artemis model
   councilSkepticModel?: string;     // Council Skeptic seat model (optional, falls back to model)
   councilPragmatistModel?: string;   // Council Pragmatist seat model

@@ -7,7 +7,7 @@ const ACTION_TIMEOUT = 10000;
 
 registry.register({
     name: 'browser_navigate',
-    description: 'Open a URL in the Prometheus Chrome (real Chrome, persistent profile — the user is already signed in to their accounts). Launches Chrome automatically if it is not running. Returns the page title, URL, and an accessibility snapshot with element refs like [ref=e12] that you pass to browser_click / browser_type.',
+    description: 'Open a URL in the Warden Chrome (real Chrome, persistent profile — the user is already signed in to their accounts). Launches Chrome automatically if it is not running. Returns the page title, URL, and an accessibility snapshot with element refs like [ref=e12] that you pass to browser_click / browser_type.',
     schema: {
         type: 'object',
         properties: {
@@ -191,7 +191,7 @@ registry.register({
         required: [],
     },
     handler: async (args) => {
-        const outPath = `/tmp/prometheus-browser-${Date.now()}.png`;
+        const outPath = `/tmp/warden-browser-${Date.now()}.png`;
         try {
             const page = await getPage();
             const buf = await page.screenshot({ type: 'png', fullPage: !!args.full_page, timeout: ACTION_TIMEOUT });

@@ -1,5 +1,5 @@
 /**
- * SMS integration module for Prometheus.
+ * SMS integration module for Warden.
  * Provides Twilio SMS send/receive functionality.
  * No npm dependencies — uses native fetch (Node 18+).
  */

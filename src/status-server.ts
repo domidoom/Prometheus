@@ -319,14 +319,14 @@ export function pushNotification(
   } catch { /* db write failure shouldn't break SSE */ }
 
   // Native desktop notification — only for tasks and alarms, not chat messages.
-  // Prometheus runs as the user's session, so notify-send reaches the Plasma
+  // Warden runs as the user's session, so notify-send reaches the Plasma
   // notification center directly. Fire and forget; a missing binary or dead DBus
   // must never break delivery.
   if (data.type === 'task' || data.type === 'alarm') {
     try {
-      const title = data.type === 'task' ? 'Prometheus — reminder' : 'Prometheus — alarm';
+      const title = data.type === 'task' ? 'Warden — reminder' : 'Warden — alarm';
       const body = (data.message || '').slice(0, 300);
-      const child = spawn('notify-send', ['--app-name=Prometheus', '--icon=appointment-soon', title, body], {
+      const child = spawn('notify-send', ['--app-name=Warden', '--icon=appointment-soon', title, body], {
         detached: true, stdio: 'ignore',
       });
       child.unref();
@@ -462,7 +462,7 @@ function autoCommitGroupFile(filePath: string): void {
   try {
     execSync('git add -A && git diff --cached --quiet || git commit -m "Dashboard file change"', {
       cwd: groupDir, timeout: 5000, stdio: 'ignore',
-      env: { ...process.env, GIT_AUTHOR_NAME: 'Prometheus', GIT_AUTHOR_EMAIL: 'dockbox@local', GIT_COMMITTER_NAME: 'Prometheus', GIT_COMMITTER_EMAIL: 'dockbox@local' },
+      env: { ...process.env, GIT_AUTHOR_NAME: 'Warden', GIT_AUTHOR_EMAIL: 'dockbox@local', GIT_COMMITTER_NAME: 'Warden', GIT_COMMITTER_EMAIL: 'dockbox@local' },
     });
   } catch { /* non-fatal */ }
 }
@@ -938,7 +938,7 @@ async function handleFiles(
 ): Promise<void> {
   const relPath = params.get('path') || '';
 
-  // Single-user Prometheus: no per-user folder scoping. safePathUser is a thin
+  // Single-user Warden: no per-user folder scoping. safePathUser is a thin
   // alias over safePath kept so call sites compile.
   function safePathUser(rel: string): string | null {
     if (rel.includes('..')) return null;
@@ -1012,11 +1012,11 @@ async function handleFiles(
         // Auto-commit the revert — two-step to avoid shell interpolation.
         // stderr is piped so failures can be logged instead of swallowed.
         efs('git', ['add', '-A'], { cwd: groupDir, timeout: 5000, stdio: ['ignore', 'ignore', 'pipe'],
-          env: { ...process.env, GIT_AUTHOR_NAME: 'Prometheus', GIT_AUTHOR_EMAIL: 'dockbox@local', GIT_COMMITTER_NAME: 'Prometheus', GIT_COMMITTER_EMAIL: 'dockbox@local' },
+          env: { ...process.env, GIT_AUTHOR_NAME: 'Warden', GIT_AUTHOR_EMAIL: 'dockbox@local', GIT_COMMITTER_NAME: 'Warden', GIT_COMMITTER_EMAIL: 'dockbox@local' },
         });
         efs('git', ['commit', '-m', `Revert: ${fileInGroup} to ${body.hash.slice(0, 7)}`], {
           cwd: groupDir, timeout: 5000, stdio: ['ignore', 'ignore', 'pipe'],
-          env: { ...process.env, GIT_AUTHOR_NAME: 'Prometheus', GIT_AUTHOR_EMAIL: 'dockbox@local', GIT_COMMITTER_NAME: 'Prometheus', GIT_COMMITTER_EMAIL: 'dockbox@local' },
+          env: { ...process.env, GIT_AUTHOR_NAME: 'Warden', GIT_AUTHOR_EMAIL: 'dockbox@local', GIT_COMMITTER_NAME: 'Warden', GIT_COMMITTER_EMAIL: 'dockbox@local' },
         });
         return json(res, { ok: true });
       } catch (err: any) {
@@ -1099,7 +1099,7 @@ async function handleFiles(
         return entries;
       };
 
-      // No per-user folder filtering in single-user Prometheus.
+      // No per-user folder filtering in single-user Warden.
       const results = listDir(full, '');
       return json(res, results);
     }
@@ -1313,7 +1313,7 @@ async function handleFiles(
         return { name, type: 'file', size: 0, mtime: '', scrubbed: false };
       }
     });
-    // No per-user folder filtering in single-user Prometheus.
+    // No per-user folder filtering in single-user Warden.
     // Sort: dirs first, then alphabetical
     entries.sort((a, b) => {
       if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
@@ -1483,16 +1483,16 @@ async function handleSettingsSave(
     process.env[envKey] = val;
   }
 
-  // If assistant name changed, update all group PROMETHEUS.md files and trigger patterns
+  // If assistant name changed, update all group WARDEN.md files and trigger patterns
   const newName = vars.ASSISTANT_NAME;
   if (newName && newName !== ASSISTANT_NAME) {
     const oldName = ASSISTANT_NAME;
-    // Update PROMETHEUS.md files in all group folders
+    // Update WARDEN.md files in all group folders
     try {
       const groupDirs = fs.readdirSync(GROUPS_DIR, { withFileTypes: true });
       for (const d of groupDirs) {
         if (!d.isDirectory()) continue;
-        const claudePath = path.join(GROUPS_DIR, d.name, 'PROMETHEUS.md');
+        const claudePath = path.join(GROUPS_DIR, d.name, 'WARDEN.md');
         if (!fs.existsSync(claudePath)) continue;
         let content = fs.readFileSync(claudePath, 'utf-8');
         const updated = content
@@ -1505,7 +1505,7 @@ async function handleSettingsSave(
         }
       }
     } catch (err) {
-      logger.warn({ err }, 'Failed to update PROMETHEUS.md files with new assistant name');
+      logger.warn({ err }, 'Failed to update WARDEN.md files with new assistant name');
     }
 
     // Update trigger patterns in registered_groups — multi-user layer removed;
@@ -1530,7 +1530,7 @@ function readPushManifest(folder: string): Record<string, string> {
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return {}; }
 }
 
-const SKIP_FILES = new Set(['PROMETHEUS.md', 'MEMORY.md', 'TODO.md', 'NOTES.md', 'JOURNAL.md', 'HEARTBEAT.md', 'config.json', 'topics.json', 'ftp-config.json', '.last-push.json']);
+const SKIP_FILES = new Set(['WARDEN.md', 'MEMORY.md', 'TODO.md', 'NOTES.md', 'JOURNAL.md', 'HEARTBEAT.md', 'config.json', 'topics.json', 'ftp-config.json', '.last-push.json']);
 const SKIP_DIRS = new Set(['logs', '.claude']);
 
 function buildFileManifest(rootDir: string): Record<string, string> {
@@ -2232,7 +2232,7 @@ async function handleChatStop(
   if (!jid || typeof jid !== 'string') {
     return error(res, 'jid required');
   }
-  // Multi-user scope check removed; single-user Prometheus has no per-user gates.
+  // Multi-user scope check removed; single-user Warden has no per-user gates.
   void scopeUserId;
   // For the single-user backend, also kill the in-process agent directly.
   const killed = killCurrentAgent();
@@ -3247,7 +3247,7 @@ export function startStatusServer(d: StatusDeps): void {
     }
 
     try {
-      // --- Dropped route trees (single-user Prometheus: no admin, no per-user APIs) ---
+      // --- Dropped route trees (single-user Warden: no admin, no per-user APIs) ---
       // The old multi-user / admin / group / company / work-task / session-link
       // route trees are gone. Surviving endpoints live directly under /api/*
       // (messages, tasks, email, files, vault, status, activity, voice,
@@ -3269,7 +3269,7 @@ export function startStatusServer(d: StatusDeps): void {
         return;
       }
       if (pathname === '/api/groups' && req.method === 'GET') {
-        // Single-user Prometheus: return the one owner group, always active.
+        // Single-user Warden: return the one owner group, always active.
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           groups: [{ jid: 'owner@local', name: 'Owner', folder: 'owner', is_main: true, active: getRouterState('agent:processing') === 'true', idle: getRouterState('agent:processing') !== 'true' }],
@@ -3357,7 +3357,7 @@ export function startStatusServer(d: StatusDeps): void {
       // Public access for standalone pages
       // --- Auth required for all /api/files and /api/messages ---
 
-      // No auth gate — single-user Prometheus. All /api/* routes are open.
+      // No auth gate — single-user Warden. All /api/* routes are open.
       // (Admin/user route trees are dropped above with 410 Gone.)
 
       // --- Authenticated admin routes ---
@@ -3460,17 +3460,17 @@ export function startStatusServer(d: StatusDeps): void {
       }
       if (pathname === '/api/open-terminal' && req.method === 'POST') {
         try {
-          // Launch a desktop terminal attached to the `prometheus-shell` tmux session
+          // Launch a desktop terminal attached to the `warden-shell` tmux session
           // where Atlas runs all bash commands — user can watch and interact live.
           // Session is created automatically if it doesn't exist yet.
-          try { execSync('tmux has-session -t prometheus-shell 2>/dev/null'); }
-          catch { execSync('tmux new-session -d -s prometheus-shell -x 200 -y 50 /bin/bash'); }
+          try { execSync('tmux has-session -t warden-shell 2>/dev/null'); }
+          catch { execSync('tmux new-session -d -s warden-shell -x 200 -y 50 /bin/bash'); }
           const candidates: [string, string[]][] = [
-            ['konsole', ['-e', 'tmux', 'attach-session', '-t', 'prometheus-shell']],
-            ['gnome-terminal', ['--', 'tmux', 'attach-session', '-t', 'prometheus-shell']],
-            ['xterm', ['-e', 'tmux', 'attach-session', '-t', 'prometheus-shell']],
-            ['kitty', ['tmux', 'attach-session', '-t', 'prometheus-shell']],
-            ['alacritty', ['-e', 'tmux', 'attach-session', '-t', 'prometheus-shell']],
+            ['konsole', ['-e', 'tmux', 'attach-session', '-t', 'warden-shell']],
+            ['gnome-terminal', ['--', 'tmux', 'attach-session', '-t', 'warden-shell']],
+            ['xterm', ['-e', 'tmux', 'attach-session', '-t', 'warden-shell']],
+            ['kitty', ['tmux', 'attach-session', '-t', 'warden-shell']],
+            ['alacritty', ['-e', 'tmux', 'attach-session', '-t', 'warden-shell']],
           ];
           let launched = false;
           for (const [bin, args] of candidates) {
@@ -3523,7 +3523,7 @@ export function startStatusServer(d: StatusDeps): void {
         return handleNotificationsSse(req, res);
       if (pathname === '/api/notifications/poll' && req.method === 'GET')
         return handleNotifications(res, params);
-      // Single-user Prometheus stubs for dashboard endpoints that no longer have
+      // Single-user Warden stubs for dashboard endpoints that no longer have
       // multi-user backing stores. Return empty data so the UI doesn't 404.
       if (pathname === '/api/notification-list' && req.method === 'GET') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -3536,7 +3536,7 @@ export function startStatusServer(d: StatusDeps): void {
         return;
       }
       if (pathname === '/api/api-keys' && req.method === 'GET') {
-        // Single-user Prometheus: default user id is 'owner'
+        // Single-user Warden: default user id is 'owner'
         const keys = getUserApiKeys('owner').map((k) => ({
           id: k.id,
           name: k.label || k.key_type,
@@ -3665,7 +3665,7 @@ export function startStatusServer(d: StatusDeps): void {
         return;
       }
       // Ideas: sub-workspaces under a group folder. Stored as subdirectories of
-      // WORKSPACE_ROOT. Empty list is fine for the single-user Prometheus default.
+      // WORKSPACE_ROOT. Empty list is fine for the single-user Warden default.
       const ideasMatch = pathname.match(/^\/api\/groups\/([^/]+)\/ideas$/);
       if (ideasMatch && req.method === 'GET') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -3830,7 +3830,7 @@ export function startStatusServer(d: StatusDeps): void {
       if (pathname.startsWith('/api/oauth'))
         return await handleOAuth(req, res, pathname, params);
 
-      // --- Admin/user route trees dropped (single-user Prometheus) ---
+      // --- Admin/user route trees dropped (single-user Warden) ---
       // /api/admin/* and /api/users/:id/* return 410 Gone via the early check above.
       if (pathname === '/api/voice' && req.method === 'POST')
         return await handleVoice(req, res);
@@ -3909,10 +3909,10 @@ export function startStatusServer(d: StatusDeps): void {
     }
   });
 
-  // --- /api/terminal WebSocket: attaches to shared prometheus-shell tmux session ---
-  // The dashboard terminal attaches to the SAME `prometheus-shell` tmux session
+  // --- /api/terminal WebSocket: attaches to shared warden-shell tmux session ---
+  // The dashboard terminal attaches to the SAME `warden-shell` tmux session
   // that the agent's Bash tool runs commands in (see execRequestHandler in
-  // agent-spawn.ts). The user sees what Prometheus is doing in real-time and can
+  // agent-spawn.ts). The user sees what Warden is doing in real-time and can
   // type commands themselves. `tmux new-session -A` creates the session if it
   // doesn't exist, or attaches to it if it does — so multiple dashboard tabs
   // all share the same live shell.
@@ -3937,7 +3937,7 @@ export function startStatusServer(d: StatusDeps): void {
         cols: 80,
         rows: 24,
         command: 'tmux',
-        args: ['new-session', '-A', '-s', 'prometheus-shell', '-x', '200', '-y', '50', '/bin/bash'],
+        args: ['new-session', '-A', '-s', 'warden-shell', '-x', '200', '-y', '50', '/bin/bash'],
       });
     } catch (err: any) {
       logger.warn({ err: err?.message }, '/api/terminal: pty spawn failed');
@@ -3978,7 +3978,7 @@ export function startStatusServer(d: StatusDeps): void {
 
   const bindHost = process.env.BIND_HOST || '0.0.0.0';
   server.listen(STATUS_PORT, bindHost, () => {
-    logger.info({ port: STATUS_PORT, host: bindHost }, 'Prometheus Dashboard started');
+    logger.info({ port: STATUS_PORT, host: bindHost }, 'Warden Dashboard started');
   });
 
   // Hourly cleanup of expired user sessions removed (multi-user session table gone).
@@ -4037,7 +4037,7 @@ export function startStatusServer(d: StatusDeps): void {
         message: alarm.label,
         taskId: alarm.id,
       });
-      // Multi-user chat-session relay removed; single-user Prometheus delivers
+      // Multi-user chat-session relay removed; single-user Warden delivers
       // alarms via pushNotification only.
       logger.info({ alarmId: alarm.id, userId: alarm.user_id, label: alarm.label }, 'Alarm fired');
     }

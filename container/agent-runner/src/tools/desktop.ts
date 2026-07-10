@@ -29,7 +29,7 @@ registry.register({
     },
     handler: async (args) => {
         const ts = Date.now();
-        const outPath = `/tmp/prometheus-desktop-${ts}.png`;
+        const outPath = `/tmp/warden-desktop-${ts}.png`;
 
         try {
             if (args.window_title) {

@@ -373,7 +373,7 @@ export function _initTestDatabase(): void {
 }
 
 /**
- * Migrate from the legacy multi-user/group schema to the single-user Prometheus
+ * Migrate from the legacy multi-user/group schema to the single-user Warden
  * desktop schema. Detects if old tables exist; if not, returns (fresh install
  * or already migrated). Otherwise:
  *   1. Backs up the DB to data/backups/pre-desktop-migration-{timestamp}.db.
@@ -454,7 +454,7 @@ export function migrateToDesktopSchema(database: Database.Database): void {
 
 /**
  * Store chat metadata only (no message content).
- * Single-user Prometheus: always uses OWNER_JID as the chat JID; the chatJid
+ * Single-user Warden: always uses OWNER_JID as the chat JID; the chatJid
  * parameter is accepted for signature compatibility but ignored.
  */
 export function storeChatMetadata(
@@ -495,7 +495,7 @@ export function storeChatMetadata(
 
 /**
  * Update chat name without changing timestamp for existing chats.
- * Single-user Prometheus: always uses OWNER_JID as the chat JID.
+ * Single-user Warden: always uses OWNER_JID as the chat JID.
  */
 export function updateChatName(_chatJid: string, name: string, channel?: string): void {
   const ch = channel ?? null;
@@ -561,7 +561,7 @@ export function deleteWhatsappChats(): void {
 
 /**
  * Store a message with full content.
- * Single-user Prometheus: chat_jid is always OWNER_JID; the msg.chat_jid field
+ * Single-user Warden: chat_jid is always OWNER_JID; the msg.chat_jid field
  * is accepted for interface compatibility but ignored.
  */
 export function storeMessage(msg: NewMessage): void {
@@ -586,7 +586,7 @@ export function getNewMessages(
   botPrefix: string,
   limit: number = 500,
 ): { messages: NewMessage[]; newTimestamp: string } {
-  // Single-user Prometheus: always query the OWNER_JID chat.
+  // Single-user Warden: always query the OWNER_JID chat.
   const jids = [OWNER_JID];
   const placeholders = jids.map(() => '?').join(',');
   // Filter bot messages using both the is_bot_message flag AND the content
@@ -1262,7 +1262,7 @@ export function getProjectsByGroup(groupJid: string): Project[] {
 }
 
 export function getProjectsForUser(_userId: string): Project[] {
-  // Single-user Prometheus: no per-user session scoping. Return all projects.
+  // Single-user Warden: no per-user session scoping. Return all projects.
   return getAllProjects();
 }
 
@@ -1273,7 +1273,7 @@ export function getAllProjects(): Project[] {
 }
 
 export function getArchivedProjectsForUser(_userId: string): Project[] {
-  // Single-user Prometheus: no per-user session scoping. Return all archived.
+  // Single-user Warden: no per-user session scoping. Return all archived.
   return db.prepare(
     `SELECT * FROM projects WHERE archived = 1 ORDER BY archived_at DESC`
   ).all() as Project[];
@@ -2298,7 +2298,7 @@ export function deleteAlarm(alarmId: string): boolean {
 }
 
 export function getDueAlarms(currentTime: string, currentDay: string, currentDate: string): any[] {
-  // Single-user Prometheus: no dashboard_users table — user_name is always 'Owner'.
+  // Single-user Warden: no dashboard_users table — user_name is always 'Owner'.
   return (db.prepare(`
     SELECT a.*, 'Owner' as user_name
     FROM user_alarms a
@@ -2728,6 +2728,6 @@ export function deleteExpiredResetTokens(): void {
 }
 
 export function getUserByEmail(_email: string): any {
-  // Single-user Prometheus: no dashboard_users table. Returns undefined.
+  // Single-user Warden: no dashboard_users table. Returns undefined.
   return undefined;
 }

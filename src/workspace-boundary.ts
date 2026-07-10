@@ -18,7 +18,7 @@ export function resolveInsideWorkspace(inputPath: string, workspaceRoot: string 
     ? inputPath
     : path.resolve(workspaceRoot, inputPath);
   const normalized = path.normalize(absolute);
-  // Cage removed per user request — Prometheus has full filesystem access.
+  // Cage removed per user request — Warden has full filesystem access.
   // Resolve symlinks when possible, fall back to normalized if the target
   // doesn't exist yet. Never throw a boundary error.
   try {

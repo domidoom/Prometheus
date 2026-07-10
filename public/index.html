@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Prometheus — Dashboard</title>
+<title>Warden — Dashboard</title>
 <link rel="stylesheet" href="/css/style.css">
 <!-- Prefetch all help pages in parallel in the background so they open
      instantly when the user clicks a help link. -->
@@ -32,7 +32,7 @@
 
   <!-- Left rail: vertical icon nav -->
   <nav class="rail" aria-label="Primary">
-    <div class="rail-logo" title="Prometheus">J</div>
+    <div class="rail-logo" title="Warden">J</div>
         <div class="rail-nav">
       <!-- Communicate -->
       <div class="rail-group-label">Comms</div>
@@ -130,7 +130,7 @@
     <header class="topbar">
       <div class="topbar-title">
         <span class="dot" id="statusDot"></span>
-        <span class="topbar-name" id="assistantName">PROMETHEUS</span>
+        <span class="topbar-name" id="assistantName">WARDEN</span>
         <span class="topbar-stats" id="topbarStats">
           <span><b>uptime</b> <span id="statUptime">--</span></span>
           <span><b>cpu</b> <span id="statCpu">--</span></span>
@@ -201,7 +201,7 @@
               <span class="dim mono" style="font-size:10px" id="attachBadge"></span>
             </div>
             <div class="composer-input-row">
-              <textarea id="chatInput" rows="1" placeholder="Message Prometheus — be specific, ask for action. Enter to send, Shift+Enter for newline."></textarea>
+              <textarea id="chatInput" rows="1" placeholder="Message Warden — be specific, ask for action. Enter to send, Shift+Enter for newline."></textarea>
               <button class="btn btn-primary" id="btnSend" title="Send">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 Send
@@ -223,7 +223,7 @@
           <div class="task-form hidden" id="taskForm">
             <div class="full">
               <label>Prompt</label>
-              <textarea id="taskPrompt" placeholder="What should Prometheus do on this schedule?"></textarea>
+              <textarea id="taskPrompt" placeholder="What should Warden do on this schedule?"></textarea>
             </div>
             <div>
               <label>Schedule type</label>
@@ -992,7 +992,7 @@ Write what you want the AI to do periodically. For example:
 <div class="modal-overlay" id="helpModal">
   <div class="modal help">
     <div class="modal-header">
-      <span class="modal-title">How to use Prometheus</span>
+      <span class="modal-title">How to use Warden</span>
       <button class="modal-close" id="btnHelpClose" title="Close">&times;</button>
     </div>
     <div class="modal-body help-modal-body">
@@ -1006,7 +1006,7 @@ Write what you want the AI to do periodically. For example:
         </div>
         <div class="help-hero-copy">
           <h2>This is not a chatbot.</h2>
-          <p>Prometheus is an autonomous agent system. It responds best to <strong>actionable requests</strong> — things you want <em>done</em>, not things you want to talk about.</p>
+          <p>Warden is an autonomous agent system. It responds best to <strong>actionable requests</strong> — things you want <em>done</em>, not things you want to talk about.</p>
         </div>
         <a class="help-hero-cta" href="/help/not-a-chatbot.html" target="_blank">Read the full guide <span aria-hidden="true">→</span></a>
       </div>
@@ -1079,7 +1079,7 @@ Write what you want the AI to do periodically. For example:
         <div class="help-callout-body">
           <p>Use the words <code>Convene The Council on this:</code> followed by a self-contained question. The seats can't see chat history, so include everything they need.</p>
           <pre>Convene The Council on this: should I learn Rust or Go first given I already know Python and want to build backend services?</pre>
-          <p class="muted">Takes 1–3 min, 3–10× tokens. Runs in the background — Prometheus replies with an interim note, then pushes the verdict as a follow-up.</p>
+          <p class="muted">Takes 1–3 min, 3–10× tokens. Runs in the background — Warden replies with an interim note, then pushes the verdict as a follow-up.</p>
         </div>
       </div>
 
@@ -1098,7 +1098,7 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
       <div class="help-callout help-callout-info">
         <div class="help-callout-icon" aria-hidden="true">⚡</div>
         <div class="help-callout-body">
-          <p>Save a workflow with <code>create_skill</code>. Later, just say the example prompt and Prometheus activates it. Manage with <code>list_skills</code> / <code>activate_skill</code> / <code>deactivate_skill</code>.</p>
+          <p>Save a workflow with <code>create_skill</code>. Later, just say the example prompt and Warden activates it. Manage with <code>list_skills</code> / <code>activate_skill</code> / <code>deactivate_skill</code>.</p>
         </div>
       </div>
 
@@ -1106,8 +1106,8 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
       <div class="help-tips">
         <div class="tip"><span class="tip-num">→</span><div><strong>Be specific.</strong> Include the file path, URL, or input data.</div></div>
         <div class="tip"><span class="tip-num">⇄</span><div><strong>Parallelize.</strong> "X AND Y in parallel" — independent tasks run concurrently.</div></div>
-        <div class="tip"><span class="tip-num">!</span><div><strong>Read BLOCKED messages.</strong> If a tool fails, Prometheus says <code>BLOCKED</code> — don't retry blindly.</div></div>
-        <div class="tip"><span class="tip-num">●</span><div><strong>Watch the verbose bar.</strong> Below the composer — shows what Prometheus is doing right now.</div></div>
+        <div class="tip"><span class="tip-num">!</span><div><strong>Read BLOCKED messages.</strong> If a tool fails, Warden says <code>BLOCKED</code> — don't retry blindly.</div></div>
+        <div class="tip"><span class="tip-num">●</span><div><strong>Watch the verbose bar.</strong> Below the composer — shows what Warden is doing right now.</div></div>
       </div>
 
       <div class="help-section-label"><span>06</span> Settings worth knowing</div>
@@ -1125,7 +1125,7 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
       <div class="help-callout help-callout-info">
         <div class="help-callout-icon" aria-hidden="true">✓</div>
         <div class="help-callout-body">
-          <p>The <strong>Run audit</strong> button (left rail, bottom) kicks off 100 scenarios through the chat API. 15–45 min, Prometheus is busy the whole time. Log at <code>/tmp/audit-100-run.log</code> — paste it into Prometheus to fix, or use Claude Code if Prometheus is broken.</p>
+          <p>The <strong>Run audit</strong> button (left rail, bottom) kicks off 100 scenarios through the chat API. 15–45 min, Warden is busy the whole time. Log at <code>/tmp/audit-100-run.log</code> — paste it into Warden to fix, or use Claude Code if Warden is broken.</p>
           <button class="btn btn-secondary btn-sm" onclick="openAuditModal();return false;">Open Audit dialog</button>
         </div>
       </div>
@@ -1135,7 +1135,7 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
         <div class="help-callout-icon" aria-hidden="true">⚠</div>
         <div class="help-callout-body">
           <ul class="tight">
-            <li>Don't run Prometheus as admin.</li>
+            <li>Don't run Warden as admin.</li>
             <li>Don't give it write access to important things — email, prod repos, keys.</li>
             <li>Make backups before letting it touch anything you care about.</li>
             <li>Don't run this on your only or work computer.</li>
@@ -1147,7 +1147,7 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
       <div class="help-deepdive">
         <div class="help-section-label"><span>↗</span> Deep dives</div>
         <div class="deepdive-grid">
-          <a href="/help/not-a-chatbot.html" target="_blank"><span>Not a chatbot</span><small>what Prometheus is and isn't</small></a>
+          <a href="/help/not-a-chatbot.html" target="_blank"><span>Not a chatbot</span><small>what Warden is and isn't</small></a>
           <a href="/help/agents.html" target="_blank"><span>Agents</span><small>Atlas, Byte, Dexter, Iris, Artemis</small></a>
           <a href="/help/council.html" target="_blank"><span>The Council</span><small>three-seat deliberation</small></a>
           <a href="/help/atlas.html" target="_blank"><span>Asking Atlas</span><small>delegation patterns</small></a>
@@ -1172,12 +1172,12 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
       <button class="modal-close" id="btnAuditClose" title="Close">&times;</button>
     </div>
     <div class="modal-body">
-      <p>Runs <strong>100+ scenarios</strong> against Prometheus through the chat API — conversation, file ops, bash, skills, The Council, parallel Atlas, sub-agents, monitor, blocked paths, voice output, injection guards.</p>
-      <div class="warn"><strong>This takes 15–45 minutes.</strong> Prometheus will be busy the whole time; you won't be able to chat normally until the audit finishes.</div>
+      <p>Runs <strong>100+ scenarios</strong> against Warden through the chat API — conversation, file ops, bash, skills, The Council, parallel Atlas, sub-agents, monitor, blocked paths, voice output, injection guards.</p>
+      <div class="warn"><strong>This takes 15–45 minutes.</strong> Warden will be busy the whole time; you won't be able to chat normally until the audit finishes.</div>
       <p>When done, the log is at <code>/tmp/audit-100-run.log</code>. To fix failures:</p>
       <ol>
-        <li>In Prometheus chat paste: <code>cat /tmp/audit-100-run.log</code> — then ask Prometheus to go through it, fix issues, and report back.</li>
-        <li>If Prometheus itself is broken, run a console agent runner (Claude Code) in the dockbox directory and paste the audit log there.</li>
+        <li>In Warden chat paste: <code>cat /tmp/audit-100-run.log</code> — then ask Warden to go through it, fix issues, and report back.</li>
+        <li>If Warden itself is broken, run a console agent runner (Claude Code) in the dockbox directory and paste the audit log there.</li>
       </ol>
       <h3>Live log</h3>
       <pre class="audit-log" id="auditLogTail">(no audit running)</pre>
@@ -1199,7 +1199,7 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
       <button class="modal-close" id="btnSwitchUserClose" title="Close">&times;</button>
     </div>
     <div class="modal-body">
-      <p class="dim mono" style="font-size:11px">Single-user Prometheus. The "user" only affects <code>sender_name</code> on your outgoing messages and the avatar label. Backend state (chats, tasks, files) is shared.</p>
+      <p class="dim mono" style="font-size:11px">Single-user Warden. The "user" only affects <code>sender_name</code> on your outgoing messages and the avatar label. Backend state (chats, tasks, files) is shared.</p>
       <div class="user-switch-list" id="userSwitchList"></div>
       <h3>Add a new sender</h3>
       <div class="row">
@@ -1214,7 +1214,7 @@ In parallel, delegate to Atlas: (1) screenshot example.com, AND
 <div class="modal-overlay" id="wizardModal">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <span class="modal-title">Welcome to Prometheus</span>
+      <span class="modal-title">Welcome to Warden</span>
       <button class="modal-close" id="btnWizardClose" title="Close">&times;</button>
     </div>
     <div class="modal-body" id="wizardBody">

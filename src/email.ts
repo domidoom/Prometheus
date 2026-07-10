@@ -1,5 +1,5 @@
 /**
- * Email integration module for Prometheus.
+ * Email integration module for Warden.
  * Provides IMAP (read) and SMTP (send) functionality.
  *
  * REQUIRES: npm install imapflow nodemailer @types/nodemailer

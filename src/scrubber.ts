@@ -306,7 +306,7 @@ function audit(scrubbed: string): string[] {
     'Granite',
     'Claude',
     'Qwen',
-    'Prometheus',
+    'Warden',
     'New Folder',
     'Social Insurance',
     'Credit Card',
@@ -468,7 +468,7 @@ const SAFE_PHRASES = new Set([
   'On Track', 'At Risk', 'New Folder', 'Social Insurance', 'Credit Card',
   'Lead Developer', 'Director Finance',
   // AI model names
-  'Granite', 'Claude', 'Qwen', 'Prometheus',
+  'Granite', 'Claude', 'Qwen', 'Warden',
   // Common tech/business terms that look like names
   'Next', 'Wire Transfer',
 ]);

@@ -212,7 +212,7 @@ export function generateICS(events: ICalEvent[]): string {
   const lines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Prometheus//Calendar//EN',
+    'PRODID:-//Warden//Calendar//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
   ];
@@ -249,7 +249,7 @@ export function generateVTodo(todo: ICalTodo): string {
   const lines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Prometheus//Calendar//EN',
+    'PRODID:-//Warden//Calendar//EN',
     'CALSCALE:GREGORIAN',
     'BEGIN:VTODO',
   ];

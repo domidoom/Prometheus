@@ -1,5 +1,5 @@
 /**
- * Web Channel — Direct Claude session via the Prometheus Dashboard.
+ * Web Channel — Direct Claude session via the Warden Dashboard.
  *
  * No external service needed. Messages flow:
  *   Browser → POST /api/messages → SQLite → message loop → agent → response

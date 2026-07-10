@@ -79,7 +79,7 @@ import { logger } from './logger.js';
 export { escapeXml, formatMessages } from './router.js';
 
 // ---------------------------------------------------------------------------
-// BROWSER-AUTOMATION GUIDANCE (permanent instruction for the Prometheus agent)
+// BROWSER-AUTOMATION GUIDANCE (permanent instruction for the Warden agent)
 // ---------------------------------------------------------------------------
 // For any browser, media, screenshot, YouTube, or other web-content task,
 // ALWAYS drive the already-running Chrome browser via Playwright, which is
@@ -96,7 +96,7 @@ export { escapeXml, formatMessages } from './router.js';
 // ---------------------------------------------------------------------------
 
 /**
- * Single-chat orchestrator (Prometheus).
+ * Single-chat orchestrator (Warden).
  *
  * All inbound messages from every channel land in the `messages` table with
  * `chat_jid = OWNER_JID`. The message loop polls that single chat, builds an
@@ -251,7 +251,7 @@ function cleanAgentText(raw: string): string {
     // Strip known internal build/IPC paths completely
     .replace(/\/tmp\/dist\//g, '')
     .replace(/\/tmp\/input\.json/g, 'input')
-    .replace(/\/tmp\/prometheus-ipc\/[^\s)'"`,]*/g, '')
+    .replace(/\/tmp\/warden-ipc\/[^\s)'"`,]*/g, '')
     .replace(/\/tmp\/agent-runner[^\s)'"`,]*/g, '')
     // For other /tmp paths: strip the directory prefix but keep the basename so
     // filenames remain readable in responses (e.g. /tmp/foo/bar/file.txt → file.txt).
@@ -293,7 +293,7 @@ async function deliverReply(text: string): Promise<void> {
  * Build the parent-side callback map the agent-runner can invoke when the
  * agent calls one of the side-effecting tools (send_message, schedule_task,
  * read_emails, send_email, install_mcp_server, uninstall_mcp_server,
- * create_skill). Each handler runs in the Prometheus parent process and has
+ * create_skill). Each handler runs in the Warden parent process and has
  * access to the DB, channels, and filesystem.
  *
  * Handlers return `{ ok: true, ... }` on success or `{ ok: false, error }`
@@ -985,7 +985,7 @@ async function updateMercurySummary(): Promise<void> {
     }).join('\n');
 
     const summaryPrompt =
-      `You are Mercury — a conversation compaction layer for Prometheus. Summarize the following older conversation turns into a concise memory note. ` +
+      `You are Mercury — a conversation compaction layer for Warden. Summarize the following older conversation turns into a concise memory note. ` +
       `Preserve facts, decisions, values, file paths, URLs, and any open tasks or questions. ` +
       `Drop pleasantries, filler, and exact wording unless it's important. ` +
       `Do NOT include the most recent ${MERCURY_RECENT_MESSAGES} turns; they are kept verbatim. ` +
@@ -1164,7 +1164,7 @@ async function startMessageLoop(): Promise<void> {
     return;
   }
   messageLoopRunning = true;
-  logger.info(`Prometheus running (single chat: ${OWNER_JID})`);
+  logger.info(`Warden running (single chat: ${OWNER_JID})`);
 
   // The agent run is fired without awaiting so this loop keeps polling while
   // it works — otherwise a long run (e.g. an atlas delegation) blocks message
@@ -1234,14 +1234,14 @@ function recoverPendingMessages(): void {
   }
 }
 
-// Dedicated persistent Chrome profile for Prometheus automation.
+// Dedicated persistent Chrome profile for Warden automation.
 // Chrome runs as a standalone process with --remote-debugging-port. The
 // agent-runner's native browser_* tools attach to it over CDP (playwright-core
 // connectOverCDP); when an agent session ends the CDP connection drops but
 // Chrome (and every open tab) stays alive.
 // Sign into Google once; the profile persists across restarts.
 const CHROME_CDP_PORT = 9222;
-const PROMETHEUS_CHROME_PROFILE = path.join(process.env.HOME ?? '/root', '.config', 'playwright-jarvis');
+const WARDEN_CHROME_PROFILE = path.join(process.env.HOME ?? '/root', '.config', 'playwright-jarvis');
 const CHROME_BIN = '/usr/bin/google-chrome-stable';
 
 // dockbox runs as a systemd user unit without DISPLAY/XAUTHORITY in its env,
@@ -1293,13 +1293,13 @@ function discoverDisplayEnv(): { DISPLAY?: string; XAUTHORITY?: string } {
 function spawnChrome(): void {
   // Clear stale profile locks so Chrome doesn't refuse to start after a crash.
   try {
-    fs.rmSync(path.join(PROMETHEUS_CHROME_PROFILE, 'SingletonLock'), { force: true });
-    fs.rmSync(path.join(PROMETHEUS_CHROME_PROFILE, 'SingletonSocket'), { force: true });
+    fs.rmSync(path.join(WARDEN_CHROME_PROFILE, 'SingletonLock'), { force: true });
+    fs.rmSync(path.join(WARDEN_CHROME_PROFILE, 'SingletonSocket'), { force: true });
   } catch { /* ignore */ }
   const displayEnv = discoverDisplayEnv();
   const child = spawn(CHROME_BIN, [
     `--remote-debugging-port=${CHROME_CDP_PORT}`,
-    `--user-data-dir=${PROMETHEUS_CHROME_PROFILE}`,
+    `--user-data-dir=${WARDEN_CHROME_PROFILE}`,
     '--no-sandbox',
     '--no-first-run',
     '--no-default-browser-check',
@@ -1587,7 +1587,7 @@ const isDirectRun =
 
 if (isDirectRun) {
   main().catch((err) => {
-    logger.error({ err }, 'Failed to start Prometheus');
+    logger.error({ err }, 'Failed to start Warden');
     process.exit(1);
   });
 }

@@ -28,7 +28,7 @@ async function cdpUp(timeoutMs = 1000): Promise<boolean> {
     }
 }
 
-/** Launch the Prometheus Chrome (persistent profile, CDP) if it is not already up. */
+/** Launch the Warden Chrome (persistent profile, CDP) if it is not already up. */
 export async function ensureChrome(): Promise<void> {
     if (await cdpUp()) return;
 

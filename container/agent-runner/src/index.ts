@@ -1,5 +1,5 @@
 /**
- * Prometheus Agent Runner
+ * Warden Agent Runner
  * Runs as a child Node process on the user's real system, receives config via stdin,
  * outputs result to stdout. Files live on disk under WORKSPACE_ROOT (default ~/Projects).
  * The workspace boundary is enforced in the tool layer by resolveInsideWorkspace().
@@ -224,9 +224,9 @@ async function readStdin() {
         console.error(`[agent-runner readStdin] listeners attached, waiting for data`);
     });
 }
-const OUTPUT_START_MARKER = '---PROMETHEUS_OUTPUT_START---';
-const OUTPUT_END_MARKER = '---PROMETHEUS_OUTPUT_END---';
-const STATUS_MARKER = '---PROMETHEUS_STATUS---';
+const OUTPUT_START_MARKER = '---WARDEN_OUTPUT_START---';
+const OUTPUT_END_MARKER = '---WARDEN_OUTPUT_END---';
+const STATUS_MARKER = '---WARDEN_STATUS---';
 
 // === Defensive loop patterns ===================================================
 
@@ -665,7 +665,7 @@ RULES:
         label: 'Artemis',
         maxIterations: 200,
         summary: "a second-opinion audit of the current conversation — reads what the user asked and what the assistant actually said/did, then flags mistakes, wrong assumptions, and oversights. It may read and search files to verify claims, but never writes, edits, sends, or runs anything. Call when the user wants a review or sanity-check, or before finalizing something important",
-        systemPrompt: `You are Artemis, a critical reviewer inside Prometheus. You are handed a transcript of a conversation between the user and the AI assistant (Prometheus). Your job is to audit it: read what the user actually asked and what the assistant said and did, and find mistakes, errors, and oversights. You have READ-ONLY tools — Read (open a file), Grep (search file contents), Glob (find files), and get_chat_history. Use them to verify claims by inspecting the files or messages referenced in the conversation. You CANNOT write, edit, send, browse the web, or run shell commands — you only read and reason.
+        systemPrompt: `You are Artemis, a critical reviewer inside Warden. You are handed a transcript of a conversation between the user and the AI assistant (Warden). Your job is to audit it: read what the user actually asked and what the assistant said and did, and find mistakes, errors, and oversights. You have READ-ONLY tools — Read (open a file), Grep (search file contents), Glob (find files), and get_chat_history. Use them to verify claims by inspecting the files or messages referenced in the conversation. You CANNOT write, edit, send, browse the web, or run shell commands — you only read and reason.
 
 Look for:
 - Factual or logical errors in the assistant's replies.
@@ -1485,11 +1485,11 @@ try {
 
 const systemPrompt = `# ROLE
 
-You are ${input.assistantName || 'Prometheus'}, a personal assistant. You run on the user's own machine. Your job is to understand what the user wants, hand it to the right specialist, and relay the result back in plain spoken English. You orchestrate — the sub-agents do the hands-on work.
+You are ${input.assistantName || 'Warden'}, a personal assistant. You run on the user's own machine. Your job is to understand what the user wants, hand it to the right specialist, and relay the result back in plain spoken English. You orchestrate — the sub-agents do the hands-on work.
 
 # ENVIRONMENT
 
-The host is **Arch Linux** running **KDE Plasma on Wayland**. The system package manager is **pacman** — to install a package, use \`sudo pacman -S <pkg>\` (\`--needed\` to skip what's already installed, \`--noconfirm\` for non-interactive). Never use apt, apt-get, yum, dnf, brew, or pip for system packages — only pacman. Prometheus runs directly on the host with full filesystem and shell access; there is no container, sandbox, or cage. sudo is interactive — the user types the password in their terminal, so any task that needs a system package goes to **atlas**: atlas runs the pacman install once and tells the user a password prompt is waiting. Do not attempt package installs yourself; you have no shell.
+The host is **Arch Linux** running **KDE Plasma on Wayland**. The system package manager is **pacman** — to install a package, use \`sudo pacman -S <pkg>\` (\`--needed\` to skip what's already installed, \`--noconfirm\` for non-interactive). Never use apt, apt-get, yum, dnf, brew, or pip for system packages — only pacman. Warden runs directly on the host with full filesystem and shell access; there is no container, sandbox, or cage. sudo is interactive — the user types the password in their terminal, so any task that needs a system package goes to **atlas**: atlas runs the pacman install once and tells the user a password prompt is waiting. Do not attempt package installs yourself; you have no shell.
 
 # WHAT THE USER HEARS
 
@@ -1624,7 +1624,7 @@ Voice-first. Plain spoken sentences. No markdown — no asterisks, bullets, back
     COUNCIL_MODEL_SKEPTIC = (input.councilSkepticModel || '').replace(/^local:/, '');
     COUNCIL_MODEL_PRAGMATIST = (input.councilPragmatistModel || '').replace(/^local:/, '');
     COUNCIL_MODEL_SYNTHESIST = (input.councilSynthesistModel || '').replace(/^local:/, '');
-    const toolContext = { chatJid: input.chatJid, groupFolder: input.groupFolder, isMain: input.isMain, userId: process.env.PROMETHEUS_USER_ID || '' };
+    const toolContext = { chatJid: input.chatJid, groupFolder: input.groupFolder, isMain: input.isMain, userId: process.env.WARDEN_USER_ID || '' };
 
     if (input.activeIdea) {
         const ideaDir = path.join(process.cwd(), 'ideas', input.activeIdea);
@@ -1720,7 +1720,7 @@ Voice-first. Plain spoken sentences. No markdown — no asterisks, bullets, back
             if (!outputStarted) {
                 outputStarted = true;
                 if (verbose) {
-                    console.error(`\n🤔 Prometheus is generating...\n`);
+                    console.error(`\n🤔 Warden is generating...\n`);
                     console.error('─'.repeat(60));
                 }
             }
@@ -1734,7 +1734,7 @@ Voice-first. Plain spoken sentences. No markdown — no asterisks, bullets, back
             // Write thinking status — include what just happened so the user sees progress
             const thinkLabel = lastToolSummary
                 ? `${lastToolSummary} — planning next...`
-                : `Prometheus is thinking...`;
+                : `Warden is thinking...`;
             appendStatus({ phase: 'thinking', label: thinkLabel });
             // Trim history to fit context budget before each chat call.
             const trimmedOrch = trimMessagesToBudget(messages, SUBAGENT_MSG_BUDGET_CHARS);
