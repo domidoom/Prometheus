@@ -339,7 +339,7 @@ Warden runs on **your** machine. It uses **your** browser, **your** desktop, **y
 
 It is not a demo. It is a real assistant with browser automation, desktop control, voice, email, calendar, multi-channel messaging, a plugin ecosystem, an agent architecture that can reason about your work and audit its own decisions, and a prompt engineering surface that has been battle-tested across hundreds of hours of real use.
 
-> 🔥 *Warden stole fire from the gods. This one runs on your laptop.*
+> 🛡️ *A warden guards what's yours. This one runs on your laptop.*
 
 ---
 
