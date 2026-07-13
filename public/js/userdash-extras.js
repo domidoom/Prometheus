@@ -2528,9 +2528,9 @@ window.UserDash = (() => {
         <p style="margin:0 0 10px;color:var(--text-secondary);line-height:1.5;font-size:13px"><strong>Give it a job, not a question.</strong> Instead of \u201CWhat are renewable energy trends?\u201D say \u201CResearch renewable energy trends, write a summary, generate a PDF, and email it to sarah@company.com.\u201D It will do all of that.</p>
         <p style="margin:0 0 10px;color:var(--text-secondary);line-height:1.5;font-size:13px"><strong>One prompt at a time.</strong> Don\u2019t send follow-ups while it\u2019s working. If you need to change course, hit the stop button first, then send a new prompt.</p>
         <p style="margin:0;color:var(--text-secondary);line-height:1.5;font-size:13px"><strong>It can build things.</strong> Scripts, web pages, dashboards, automated workflows, data analysis \u2014 if you can describe it, it can probably make it.</p>` },
-    { title: 'Meet Jarvis',
+    { title: 'Meet Warden',
       html: () => `
-        <p style="margin:0 0 12px;color:var(--text-secondary);line-height:1.5;font-size:13px">Your assistant is called <strong>Jarvis</strong>. It\u2019s the same assistant across all models \u2014 same workspace, same memory, same tools. The difference is personality and speed.</p>
+        <p style="margin:0 0 12px;color:var(--text-secondary);line-height:1.5;font-size:13px">Your assistant is called <strong>Warden</strong>. It\u2019s the same assistant across all models \u2014 same workspace, same memory, same tools. The difference is personality and speed.</p>
         <div style="display:flex;flex-direction:column;gap:8px;margin:0 0 12px">
           <div style="border:2px solid var(--accent);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5">
             <div style="font-weight:600;color:var(--accent)">Default <span style="font-weight:400;color:var(--text-tertiary)">(recommended)</span></div>
@@ -2560,16 +2560,16 @@ window.UserDash = (() => {
       html: () => `
         <p style="margin:0 0 12px;color:var(--text-secondary);font-size:13px">Here\u2019s what you can do from each tab:</p>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.5">
-          <div><strong>Chat</strong> \u2014 Give Jarvis tasks. One clear prompt per task. Be specific about what you want.</div>
+          <div><strong>Chat</strong> \u2014 Give Warden tasks. One clear prompt per task. Be specific about what you want.</div>
           <div><strong>Quick Actions</strong> \u2014 Pre-built prompts that work well out of the box. Great place to start.</div>
-          <div><strong>Talk</strong> \u2014 Speak to Jarvis instead of typing. Same capabilities, just hands-free.</div>
+          <div><strong>Talk</strong> \u2014 Speak to Warden instead of typing. Same capabilities, just hands-free.</div>
           <div><strong>Email</strong> \u2014 Read and send emails. Connect your account in Connected Accounts first.</div>
           <div><strong>SMS</strong> \u2014 Send and receive text messages through connected phone numbers.</div>
-          <div><strong>Files</strong> \u2014 Your workspace. Everything Jarvis creates lives here \u2014 documents, PDFs, code, data.</div>
+          <div><strong>Files</strong> \u2014 Your workspace. Everything Warden creates lives here \u2014 documents, PDFs, code, data.</div>
           <div><strong>Projects</strong> \u2014 Track projects with deliverables, blockers, budgets, and timelines.</div>
           <div><strong>Calendar</strong> \u2014 View and manage events. Syncs with Google or Outlook.</div>
           <div><strong>Schedules</strong> \u2014 Automated tasks that run on a timer \u2014 daily briefings, reminders, periodic checks.</div>
-          <div><strong>Heartbeat</strong> \u2014 Instructions Jarvis follows every hour, like monitoring your inbox.</div>
+          <div><strong>Heartbeat</strong> \u2014 Instructions Warden follows every hour, like monitoring your inbox.</div>
           <div><strong>Alarms</strong> \u2014 Set alarms with sound notifications for deadlines and reminders.</div>
         </div>` },
     { title: 'Preferences',
