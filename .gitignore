@@ -53,6 +53,20 @@ jarvis-install (3)/
 public/fonts.gstatic.com/
 public/fonts.googleapis.com/
 
+# ── Voice app: keep only main.py + its runtime closure ──
+# Flutter/Android app (separate product, not needed to run main.py)
+voice/dockbox_voice/
+# Windows installer / packaging artifacts
+voice/*.spec
+voice/build.ps1
+voice/installer.iss
+voice/run.ps1
+voice/VOICE_APP_RUNDOWN.md
+# Alternative entry points / setup utils (not needed to run main.py)
+voice/linux.py
+voice/login.py
+voice/setup.py
+
 # ── Python runtime ──
 __pycache__/
 *.pyc
