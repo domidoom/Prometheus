@@ -1,0 +1,67 @@
+# ── Secrets & shell dotfiles — never commit ──
+.env
+.env.local
+.env.*.local
+.bash_history
+.bash_logout
+.bash_profile
+.bashrc
+.profile
+.zshrc
+.zshrc_history
+.fishsrv.pl
+.claude.json
+.claude/
+.config/
+
+# ── Caches ──
+.cache/
+
+# ── Build output ──
+node_modules/
+dist/
+*.tsbuildinfo
+
+# ── Runtime data (DB, sessions, ipc, per-group folders) ──
+data/
+logs/
+tmp/
+store/
+groups/
+home/
+git/
+
+# ── Archives / stray binaries ──
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+webcam_capture.jpg
+1
+EOF
+
+# ── Nested / stray duplicate dirs ──
+Warden/
+warden/
+attic/
+jarvis-install/
+jarvis-install (2)/
+jarvis-install (3)/
+
+# ── Vendored Google Fonts cache (mirrored gstatic/googleapis — re-fetchable) ──
+public/fonts.gstatic.com/
+public/fonts.googleapis.com/
+
+# ── Python runtime ──
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ── OS / editor ──
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
