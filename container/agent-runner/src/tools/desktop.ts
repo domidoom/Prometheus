@@ -1,7 +1,7 @@
-import fs from 'fs';
 import { execSync } from 'child_process';
 import { registry } from '../tool-registry.js';
 import { log } from '../ipc-helpers.js';
+import { writeCallbackAsync } from '../index.js';
 
 const DISPLAY_ENV = {
     DISPLAY: process.env.DISPLAY || ':1',
@@ -17,52 +17,105 @@ function run(cmd: string, extraEnv: Record<string, string> = {}): string {
     }).trim();
 }
 
+/** Push a base64 image into the vision-context queue consumed after this tool call. */
+function queueForVision(b64: string): void {
+    if (!b64) return;
+    if (!(globalThis as any)._pendingImages) (globalThis as any)._pendingImages = [];
+    (globalThis as any)._pendingImages.push(b64);
+}
+
 registry.register({
     name: 'desktop_screenshot',
-    description: 'Take a screenshot of the full desktop. The image is loaded into your vision context immediately — you can see and describe it in your next response. Returns the file path and native resolution.',
+    description: 'Take a screenshot of the full desktop. Captured by the Warden orchestrator on the host and loaded into YOUR vision context immediately — you (the orchestrator) can see and describe it in your next response. Call this yourself; do NOT delegate it to a sub-agent (sub-agents like Atlas have no vision and cannot see the result). Returns the native resolution.',
     schema: {
         type: 'object',
         properties: {
             window_title: { type: 'string', description: 'Optional: capture a specific window by title substring instead of the full desktop.' },
+            region: {
+                type: 'object',
+                description: 'Optional: capture a sub-rectangle in pixels.',
+                properties: {
+                    x: { type: 'number' }, y: { type: 'number' },
+                    w: { type: 'number' }, h: { type: 'number' },
+                },
+            },
         },
         required: [],
     },
     handler: async (args) => {
-        const ts = Date.now();
-        const outPath = `/tmp/warden-desktop-${ts}.png`;
-
         try {
-            if (args.window_title) {
-                try { run(`xdotool search --name "${args.window_title}" windowactivate --sync`); } catch { /* best-effort */ }
-                run(`spectacle -b -n -a -o "${outPath}"`);
-            } else {
-                run(`spectacle -b -n -f -o "${outPath}"`);
+            const res = await writeCallbackAsync('desktop_screenshot', args, 30000);
+            if (!res || res.ok === false) {
+                return `Error taking screenshot: ${res?.error || 'host callback failed'}`;
             }
+            const b64 = typeof res.image === 'string' ? res.image : '';
+            if (!b64) return `Error: host returned no image data${res?.error ? ` (${res.error})` : ''}.`;
+            queueForVision(b64);
+            const sizeDesc = res.width && res.height ? ` (${res.width}×${res.height}px — these are the exact screen coordinates)` : '';
+            log(`desktop_screenshot: queued host capture ${res.width}x${res.height} for vision`);
+            return `Screenshot taken${sizeDesc}. The image is now in your vision context — you can see the screen and identify element positions. Use desktop_click(x, y) with coordinates from the image to interact.`;
         } catch (err: any) {
             return `Error taking screenshot: ${err.message}`;
         }
+    },
+    toolset: 'terminal',
+    tier: 'public',
+});
 
-        if (!fs.existsSync(outPath)) {
-            return 'Error: screenshot file was not created.';
-        }
-
-        let width = 0, height = 0;
+registry.register({
+    name: 'webcam_capture',
+    description: 'Capture a single frame from the host webcam and load it into YOUR vision context. The Warden orchestrator grabs the frame on the host. Call this yourself; do NOT delegate it to a sub-agent (sub-agents have no vision and cannot see the result). Returns the resolution.',
+    schema: {
+        type: 'object',
+        properties: {
+            device: { type: 'string', description: 'Optional: v4l2 device path (default /dev/video0).' },
+            width: { type: 'number', description: 'Optional: requested frame width in pixels (default 640).' },
+        },
+        required: [],
+    },
+    handler: async (args) => {
         try {
-            const info = run(`identify -format "%wx%h" "${outPath}"`);
-            [width, height] = info.split('x').map(Number);
-        } catch { /* unknown size */ }
-
-        try {
-            const buf = fs.readFileSync(outPath);
-            if (!(globalThis as any)._pendingImages) (globalThis as any)._pendingImages = [];
-            (globalThis as any)._pendingImages.push(buf.toString('base64'));
-            log(`desktop_screenshot: queued ${outPath} (${width}x${height}) for vision`);
+            const res = await writeCallbackAsync('webcam_capture', args, 20000);
+            if (!res || res.ok === false) {
+                return `Error capturing webcam: ${res?.error || 'host callback failed'}`;
+            }
+            const b64 = typeof res.image === 'string' ? res.image : '';
+            if (!b64) return `Error: host returned no image data${res?.error ? ` (${res.error})` : ''}.`;
+            queueForVision(b64);
+            log(`webcam_capture: queued host frame ${res.width}x${res.height} for vision`);
+            return `Webcam frame captured (${res.width}×${res.height}px). The image is now in your vision context — describe what you see.`;
         } catch (err: any) {
-            return `Screenshot saved to ${outPath} but failed to load for vision: ${err.message}`;
+            return `Error capturing webcam: ${err.message}`;
         }
+    },
+    toolset: 'terminal',
+    tier: 'public',
+});
 
-        const sizeDesc = width && height ? ` (${width}×${height}px — these are the exact screen coordinates)` : '';
-        return `Screenshot taken${sizeDesc}. The image is now in your vision context — you can see the screen and identify element positions. Use desktop_click(x, y) with coordinates from the image to interact.`;
+registry.register({
+    name: 'read_image',
+    description: 'Read an image file from the HOST filesystem (any path the Warden orchestrator can access, e.g. /home/dominic/Photos/x.jpg) and load it into YOUR vision context. Use this for images outside the container workspace. Call this yourself; do NOT delegate it to a sub-agent (sub-agents have no vision and cannot see the result). Returns the dimensions.',
+    schema: {
+        type: 'object',
+        properties: {
+            path: { type: 'string', description: 'Absolute path to the image file on the host.' },
+        },
+        required: ['path'],
+    },
+    handler: async (args) => {
+        try {
+            const res = await writeCallbackAsync('read_image', args, 20000);
+            if (!res || res.ok === false) {
+                return `Error reading image: ${res?.error || 'host callback failed'}`;
+            }
+            const b64 = typeof res.image === 'string' ? res.image : '';
+            if (!b64) return `Error: host returned no image data${res?.error ? ` (${res.error})` : ''}.`;
+            queueForVision(b64);
+            log(`read_image: queued host image ${args.path} ${res.width}x${res.height} for vision`);
+            return `Image loaded from ${args.path} (${res.width}×${res.height}px). It is now in your vision context — describe what you see.`;
+        } catch (err: any) {
+            return `Error reading image: ${err.message}`;
+        }
     },
     toolset: 'terminal',
     tier: 'public',
