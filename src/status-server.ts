@@ -8,7 +8,7 @@ import { CronExpressionParser } from 'cron-parser';
 import { readEnvFile } from './env.js';
 import { logger } from './logger.js';
 import { transcribeLocal } from './transcription.js';
-import { killCurrentAgent, getLiveStatus } from './agent-spawn.js';
+import { killCurrentAgent, getLiveStatus, getProgressHistory } from './agent-spawn.js';
 import {
   ASSISTANT_NAME,
   CONTAINER_IMAGE,
@@ -771,6 +771,7 @@ function getStatusData() {
     activeContainers: Math.max(queueStatus.activeCount, queueStatus.groups.filter((g: any) => g.active).length),
     scheduledTasks: deps.getAllTasks().length,
     runningJobs: getLiveStatus().jobs || 0,
+    progress: getProgressHistory(),
     groups: groupList,
     timestamp: new Date().toISOString(),
     ollamaChatModel: process.env.OLLAMA_CHAT_MODEL || OLLAMA_CHAT_MODEL,
